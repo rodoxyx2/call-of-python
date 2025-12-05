@@ -26,7 +26,29 @@ const topics = {
         challenge: "Escribe un if que imprima 'Mayor' si x es mayor que 10",
         solution: code => code.includes("if") && code.includes("> 10"),
         error: "Tu estructura condicional no cumple la condición."
+    },
+
+        bucles: {
+        theory: "Un bucle permite repetir acciones. En Python usamos 'for' o 'while'.",
+        challenge: "Escribe un bucle for que imprima los números del 1 al 3.",
+        solution: code => code.includes("for") && code.includes("range") && code.includes("print"),
+        error: "Tu bucle debe usar range y la función print."
+    },
+
+    listas: {
+        theory: "Una lista es una colección de datos. Ejemplo: numeros = [1, 2, 3]",
+        challenge: "Crea una lista llamada frutas con 3 frutas y haz print de la lista.",
+        solution: code => code.includes("frutas") && code.includes("print("),
+        error: "Asegúrate de llamar la lista 'frutas' y mostrarla con print."
+    },
+
+    ejercicios: {
+        theory: "Pon a prueba lo que sabes. Este reto combina variables, condicionales y bucles.",
+        challenge: "Crea una variable x con valor 5 y escribe un if que imprima 'Correcto' si x es igual a 5.",
+        solution: code => code.includes("x = 5") && (code.includes("== 5") || code.includes("==5")) && code.includes("print"),
+        error: "Tu condición debe verificar si x es igual a 5 e imprimir algo."
     }
+
 };
 
 // DOM

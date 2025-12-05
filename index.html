@@ -3,59 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aprende Python Interactivo</title>
+    <title>Campaña Python</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- SIDEBAR -->
-    <aside id="sidebar">
-        <h2>🐍 Python 101</h2>
-        <ul id="menu">
-            <li data-topic="intro" class="active">Introducción</li>
-            <li data-topic="variables">Variables</li>
-            <li data-topic="tipos">Tipos de Datos</li>
-            <li data-topic="condicionales">Condicionales</li>
-            <li data-topic="bucles">Bucles</li>
-            <li data-topic="listas">Listas</li>
-            <li data-topic="funciones">Funciones</li>
-            <li data-topic="ejercicios">Ejercicios Finales</li>
-        </ul>
-    </aside>
+    <header>
+        <h1>Python: Campaña de Entrenamiento</h1>
+    </header>
 
-    <!-- MAIN CONTENT -->
-    <main id="content">
+    <div class="container">
 
-        <header>
-            <h1>Aprende Python Interactivo</h1>
-            <p>Aprende programando, no memorizando.</p>
-        </header>
+        <nav class="sidebar" id="sidebar">
+            <ul>
+                <li data-topic="intro" class="active">Introducción</li>
+                <li data-topic="level1" class="">Nivel 1: Variables</li>
+                <li data-topic="level2" class="locked">Nivel 2: Tipos</li>
+                <li data-topic="level3" class="locked">Nivel 3: Condicionales</li>
+                <li data-topic="level4" class="locked">Nivel 4: Bucles</li>
+                <li data-topic="final" class="locked">Final Boss</li>
+            </ul>
+        </nav>
 
-        <section id="theory">
-            <h2>Bienvenida</h2>
-            <p>Selecciona un tema del menú para empezar tu aventura aprendiendo Python.</p>
-        </section>
+        <main class="content">
 
-        <section id="challenge">
-            <h3>🎮 Reto:</h3>
-            <p>Selecciona un tema para ver el reto correspondiente.</p>
-        </section>
+            <section id="theory" class="box"></section>
 
-        <section id="editor-area">
-            <textarea id="editor" placeholder="# Escribe tu código aquí..."></textarea>
-            <button id="runBtn">Ejecutar</button>
-        </section>
+            <section class="box">
+                <h3>Editor</h3>
+                <textarea id="editor" placeholder="Escribe tu código aquí..."></textarea>
+                <button id="run">Ejecutar</button>
+            </section>
 
-        <section id="output">
-            <p>Resultados aparecerán aquí...</p>
-        </section>
+            <section id="feedback" class="box"></section>
 
-        <footer>
-            <p>Python Interactivo © 2024 — hecho con ❤️ pa’ aprender</p>
-        </footer>
+        </main>
+    </div>
 
-    </main>
+    <footer>
+        <p>Hecho con furia gamer y Python simulado</p>
+    </footer>
 
-<script src="script.js"></script>
+    <script src="script.js"></script>
+
 </body>
 </html>

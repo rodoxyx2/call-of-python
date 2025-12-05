@@ -1,41 +1,67 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mini Juego</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Aprende Python Interactivo</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-
-    <div id="game">
-        <!-- Pantalla de inicio -->
-        <div id="screen-start" class="screen active">
-            <h1>Mini Quiz</h1>
-            <p>Responde correctamente y gana puntos</p>
-            <button onclick="startGame()">Jugar</button>
-        </div>
-
-        <!-- Pantalla del juego -->
-        <div id="screen-game" class="screen">
-            <h2 id="question"></h2>
-
-            <div id="options"></div>
-
-            <div id="feedback"></div>
-
-            <button id="next-btn" onclick="nextQuestion()" class="hidden">Siguiente</button>
-        </div>
-
-        <!-- Pantalla final -->
-        <div id="screen-end" class="screen">
-            <h1>¡Terminaste!</h1>
-            <p>Puntuación: <span id="score"></span></p>
-            <button onclick="restartGame()">Jugar de nuevo</button>
-        </div>
+  <header class="header">
+    <div class="header-inner">
+      <h1 class="title">🐍 Aprende Python Interactivo</h1>
+      <p class="subtitle">Práctica por escenarios — sin backend, todo simulado en frontend</p>
     </div>
+  </header>
 
-    <script src="script.js"></script>
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <nav>
+        <ul id="topicsList" class="topics-list">
+          <!-- Rellenado por script.js -->
+        </ul>
+      </nav>
+
+      <div class="state-panel">
+        <h3>Estado (simulado)</h3>
+        <pre id="stateView">{}</pre>
+      </div>
+    </aside>
+
+    <main class="main">
+      <section class="theory" id="theoryArea">
+        <!-- Teoría del tema -->
+      </section>
+
+      <section class="scenario" id="scenarioArea">
+        <!-- Enunciado / desafío -->
+      </section>
+
+      <section class="editor-wrap">
+        <label class="editor-label" for="codeEditor">Editor (simulación Python)</label>
+
+        <div class="editor">
+          <!-- Pre para resaltado -->
+          <pre id="highlight" class="highlight" aria-hidden="true"></pre>
+          <!-- Textarea real -->
+          <textarea id="codeEditor" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea>
+        </div>
+
+        <div class="controls">
+          <button id="runBtn" class="btn primary">Ejecutar / Verificar</button>
+          <button id="resetBtn" class="btn">Restablecer</button>
+          <div class="hint">Tip: los comentarios empiezan con <code>#</code></div>
+        </div>
+
+        <div id="outputArea" class="output"></div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="footer">
+    <small>Creado para aprender — Simulación de Python con JavaScript • Diseño responsivo</small>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>

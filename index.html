@@ -1,16 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <script type="module" src="app.js"></script>
-    <title>Call-of-python</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Aprende Python Interactivo</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <h2>wena noche</h2>
-    <h1>Call of Python - Learn programming by playing</h1>
-    <div class="contenedor">
-        <div id="app"></div>
+  <header class="site-header">
+    <h1>Aprende Python Interactivo</h1>
+  </header>
+
+  <div class="app">
+    <nav class="sidebar" id="sidebar">
+      <ul id="topicsList">
+        <!-- Temas se llenan desde script.js -->
+      </ul>
+    </nav>
+
+    <main class="content">
+      <section class="theory" id="theoryArea">
+        <!-- Teoría del tema -->
+      </section>
+
+      <section class="scenario" id="scenarioArea">
+        <!-- Enunciado del escenario / desafio -->
+      </section>
+
+      <section class="editor-area">
+        <label for="codeEditor" class="editor-label">Editor (simulación Python):</label>
+
+        <!-- Contenedor para highlighting: pre muestra resaltado, textarea para editar -->
+        <div class="editor-wrapper">
+          <pre aria-hidden="true" id="highlight" class="highlight"></pre>
+          <textarea id="codeEditor" spellcheck="false" autocomplete="off" autocorrect="off" autocapitalize="off"></textarea>
+        </div>
+
+        <div class="editor-actions">
+          <button id="runBtn" class="btn primary">Ejecutar / Verificar</button>
+          <button id="resetBtn" class="btn">Restablecer</button>
+        </div>
+
+        <div id="outputArea" class="output">
+          <!-- Resultados y feedback -->
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="site-footer">
+    <small>Hecho con ❤️ — Simulación educativa en frontend. No ejecuta Python real.</small>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>

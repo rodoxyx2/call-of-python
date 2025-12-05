@@ -1,67 +1,61 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Aprende Python Interactivo</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprende Python Interactivo</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="header">
-    <div class="header-inner">
-      <h1 class="title">🐍 Aprende Python Interactivo</h1>
-      <p class="subtitle">Práctica por escenarios — sin backend, todo simulado en frontend</p>
-    </div>
-  </header>
 
-  <div class="app">
-    <aside class="sidebar" id="sidebar">
-      <nav>
-        <ul id="topicsList" class="topics-list">
-          <!-- Rellenado por script.js -->
+    <!-- SIDEBAR -->
+    <aside id="sidebar">
+        <h2>🐍 Python 101</h2>
+        <ul id="menu">
+            <li data-topic="intro" class="active">Introducción</li>
+            <li data-topic="variables">Variables</li>
+            <li data-topic="tipos">Tipos de Datos</li>
+            <li data-topic="condicionales">Condicionales</li>
+            <li data-topic="bucles">Bucles</li>
+            <li data-topic="listas">Listas</li>
+            <li data-topic="funciones">Funciones</li>
+            <li data-topic="ejercicios">Ejercicios Finales</li>
         </ul>
-      </nav>
-
-      <div class="state-panel">
-        <h3>Estado (simulado)</h3>
-        <pre id="stateView">{}</pre>
-      </div>
     </aside>
 
-    <main class="main">
-      <section class="theory" id="theoryArea">
-        <!-- Teoría del tema -->
-      </section>
+    <!-- MAIN CONTENT -->
+    <main id="content">
 
-      <section class="scenario" id="scenarioArea">
-        <!-- Enunciado / desafío -->
-      </section>
+        <header>
+            <h1>Aprende Python Interactivo</h1>
+            <p>Aprende programando, no memorizando.</p>
+        </header>
 
-      <section class="editor-wrap">
-        <label class="editor-label" for="codeEditor">Editor (simulación Python)</label>
+        <section id="theory">
+            <h2>Bienvenida</h2>
+            <p>Selecciona un tema del menú para empezar tu aventura aprendiendo Python.</p>
+        </section>
 
-        <div class="editor">
-          <!-- Pre para resaltado -->
-          <pre id="highlight" class="highlight" aria-hidden="true"></pre>
-          <!-- Textarea real -->
-          <textarea id="codeEditor" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off"></textarea>
-        </div>
+        <section id="challenge">
+            <h3>🎮 Reto:</h3>
+            <p>Selecciona un tema para ver el reto correspondiente.</p>
+        </section>
 
-        <div class="controls">
-          <button id="runBtn" class="btn primary">Ejecutar / Verificar</button>
-          <button id="resetBtn" class="btn">Restablecer</button>
-          <div class="hint">Tip: los comentarios empiezan con <code>#</code></div>
-        </div>
+        <section id="editor-area">
+            <textarea id="editor" placeholder="# Escribe tu código aquí..."></textarea>
+            <button id="runBtn">Ejecutar</button>
+        </section>
 
-        <div id="outputArea" class="output"></div>
-      </section>
+        <section id="output">
+            <p>Resultados aparecerán aquí...</p>
+        </section>
+
+        <footer>
+            <p>Python Interactivo © 2024 — hecho con ❤️ pa’ aprender</p>
+        </footer>
+
     </main>
-  </div>
 
-  <footer class="footer">
-    <small>Creado para aprender — Simulación de Python con JavaScript • Diseño responsivo</small>
-  </footer>
-
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>

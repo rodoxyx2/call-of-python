@@ -1,145 +1,102 @@
-/* style.css
-   Diseño limpio, moderno y responsive. 
-   Usa layout de sidebar + contenido principal. */
-
-/* Reset ligerito */
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html,body { height: 100%; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; color: #222; background: #f7fafc; }
-
-/* Header */
-.site-header {
-  background: linear-gradient(90deg, #4f46e5 0%, #06b6d4 100%);
-  color: white;
-  padding: 18px 24px;
-  box-shadow: 0 3px 8px rgba(2,6,23,0.08);
-}
-.site-header h1 { font-size: 1.25rem; font-weight: 600; }
-
-/* Layout */
-.app {
-  display: grid;
-  grid-template-columns: 240px 1fr;
-  gap: 18px;
-  padding: 18px;
-  max-width: 1200px;
-  margin: 18px auto;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-/* Sidebar */
-.sidebar {
-  background: white;
-  border-radius: 12px;
-  padding: 12px;
-  box-shadow: 0 6px 18px rgba(15,23,42,0.06);
-  height: fit-content;
-}
-.sidebar ul { list-style: none; }
-.sidebar li {
-  padding: 10px;
-  border-radius: 8px;
-  cursor: pointer;
-  margin-bottom: 6px;
-  transition: background 0.15s, transform 0.06s;
-}
-.sidebar li:hover { background: rgba(79,70,229,0.06); transform: translateY(-1px); }
-.sidebar li.active {
-  background: linear-gradient(90deg, rgba(79,70,229,0.12), rgba(6,182,212,0.06));
-  border-left: 4px solid #4f46e5;
-  font-weight: 600;
+body {
+    font-family: sans-serif;
+    background: linear-gradient(135deg, #2b1055, #6a10a8);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-/* Content */
-.content { display: flex; flex-direction: column; gap: 12px; }
-
-/* Theory & scenario boxes */
-.theory, .scenario {
-  background: white;
-  border-radius: 12px;
-  padding: 14px;
-  box-shadow: 0 6px 18px rgba(15,23,42,0.04);
-}
-.theory h2, .scenario h2 { margin-bottom: 8px; font-size: 1.05rem; color: #0f172a; }
-.theory p { line-height: 1.5; color: #334155; }
-
-/* Editor area */
-.editor-area { background: white; border-radius: 12px; padding: 14px; box-shadow: 0 6px 18px rgba(15,23,42,0.04); }
-.editor-label { display:block; margin-bottom:8px; font-weight:600; color:#0f172a; }
-
-.editor-wrapper {
-  position: relative;
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid #e6edf3;
-  min-height: 150px;
-  max-height: 320px;
+/* Contenedor principal del juego */
+#game {
+    width: 95%;
+    max-width: 400px;
+    background: rgba(255,255,255,0.08);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    backdrop-filter: blur(10px);
 }
 
-/* Pre para highlighting (debajo) */
-.highlight {
-  margin: 0;
-  padding: 12px;
-  font-family: "Fira Code", monospace;
-  font-size: 14px;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  min-height: 150px;
-  color: transparent; /* texto real invisible, colores via spans */
-  pointer-events: none;
-  line-height: 1.4;
-  background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+/* Pantallas */
+.screen {
+    display: none;
+    text-align: center;
+    animation: fade .4s ease;
 }
 
-/* Textarea encima, transparent background to reveal highlight */
-#codeEditor {
-  position: absolute;
-  inset: 0;
-  margin: 0;
-  padding: 12px;
-  border: none;
-  outline: none;
-  resize: none;
-  width: 100%;
-  height: 100%;
-  font-family: "Fira Code", monospace;
-  font-size: 14px;
-  line-height: 1.4;
-  background: transparent;
-  color: #0f172a;
+.screen.active {
+    display: block;
 }
 
-/* Styling spans inside highlight (basic python-like) */
-.kw { color: #7c3aed; font-weight: 600; } /* keywords */
-.num { color: #db2777; }                  /* numbers */
-.str { color: #059669; }                  /* strings */
-.cm { color: #64748b; }                   /* comments */
-.varname { color: #0ea5e9; }              /* variable names */
-.func { color: #b45309; }                 /* functions like print */
-
-/* Buttons & output */
-.editor-actions { margin-top: 10px; display:flex; gap:8px; }
-.btn { padding: 8px 12px; border-radius: 8px; background: #eef2ff; border: none; cursor: pointer; font-weight:600; }
-.btn.primary { background: #4f46e5; color: white; box-shadow: 0 6px 16px rgba(79,70,229,0.18); }
-.btn:active { transform: translateY(1px); }
-
-.output {
-  margin-top: 12px;
-  padding: 12px;
-  background: #0f172a10;
-  border-radius: 8px;
-  min-height: 40px;
-  font-family: Inter, sans-serif;
+/* Títulos */
+h1, h2 {
+    margin-bottom: 15px;
 }
 
-/* Success / error messages */
-.msg-success { color: #065f46; background: #ecfdf5; padding:8px; border-radius:8px; }
-.msg-error { color: #7f1d1d; background: #fff1f2; padding:8px; border-radius:8px; }
+/* Botones */
+button {
+    padding: 12px 20px;
+    background: #ffcc00;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: .2s;
+}
 
-/* Footer */
-.site-footer { text-align:center; padding:12px; color:#475569; font-size:0.85rem; }
+button:hover {
+    transform: scale(1.05);
+}
 
-/* Responsive */
-@media (max-width: 880px) {
-  .app { grid-template-columns: 1fr; padding: 12px; }
-  .sidebar { order: 2; width: 100%; }
-  .content { order: 1; }
+/* Opciones */
+#options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.option {
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    background: rgba(255,255,255,0.1);
+}
+
+.option:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+.correct {
+    background: #00bb57 !important;
+}
+
+.incorrect {
+    background: #e53935 !important;
+}
+
+#feedback {
+    margin-top: 15px;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Animación */
+@keyframes fade {
+    from { opacity: 0; transform: translateY(15px); }
+    to   { opacity: 1; transform: translateY(0); }
 }

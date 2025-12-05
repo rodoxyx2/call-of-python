@@ -1,124 +1,155 @@
-* {
+/* Colores base */
+:root {
+    --bg: #0d0c0d;
+    --card: #19181a;
+    --accent: #e31b2d;
+    --accent-light: #ff5a69;
+    --text: #f2f2f2;
+}
+
+/* Reset básico */
+*{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: "Consolas", monospace;
 }
 
-body {
-    background: #0d0d0d;
-    color: #f2f2f2;
-}
-
-header {
-    background: #1a0000;
-    padding: 20px;
-    text-align: center;
-    border-bottom: 2px solid #ff1a1a;
-}
-
-.container {
+body{
+    background: var(--bg);
+    color: var(--text);
+    height: 100vh;
     display: flex;
-    height: calc(100vh - 90px);
+    flex-direction: column;
 }
 
-/* SIDEBAR */
-
-.sidebar {
-    width: 260px;
-    background: #140000;
-    border-right: 2px solid #ff1a1a;
-    padding-top: 20px;
+.layout{
+    display: flex;
+    flex: 1;
+    overflow: hidden;
 }
 
-.sidebar ul {
-    list-style: none;
+/* Sidebar */
+.sidebar{
+    width: 250px;
+    background: #141315;
+    padding: 20px;
+    border-right: 2px solid var(--accent);
+    display: flex;
+    flex-direction: column;
 }
 
-.sidebar li {
-    padding: 15px 20px;
-    font-size: 16px;
+.logo{
+    color: var(--accent-light);
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 26px;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px var(--accent);
+}
+
+.menu-title{
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: var(--accent-light);
+}
+
+.level-btn{
+    margin: 6px 0;
+    padding: 10px;
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--accent);
+    color: var(--text);
     cursor: pointer;
-    border-bottom: 1px solid #330000;
-    transition: 0.3s;
+    text-align: left;
+    border-radius: 6px;
+    transition: 0.2s;
 }
 
-.sidebar li.active {
-    background: #ff1a1a;
-    color: #0d0d0d;
-    font-weight: bold;
+.level-btn.active{
+    background: var(--accent);
 }
 
-.sidebar li:hover:not(.locked) {
-    background: #b30000;
-}
-
-.sidebar li.locked {
-    color: #664444;
+.level-btn.locked{
+    color: #777;
+    border: 1px solid #555;
     cursor: not-allowed;
 }
 
-/* CONTENT */
+.level-btn:hover:not(.locked){
+    background: var(--accent-light);
+}
 
-.content {
+
+/* Main */
+.game-container{
     flex: 1;
-    padding: 20px;
+    padding: 30px;
     overflow-y: auto;
 }
 
-.box {
-    background: #1a0000;
-    border: 1px solid #660000;
-    border-radius: 5px;
-    padding: 20px;
+.game-header{
     margin-bottom: 20px;
 }
 
-/* EDITOR */
-
-textarea {
-    width: 100%;
-    height: 120px;
-    background: #0d0d0d;
-    color: #ffb3b3;
-    border: 1px solid #ff1a1a;
-    border-radius: 5px;
-    padding: 10px;
+#levelTitle{
+    font-size: 28px;
+    text-shadow: 0 0 10px var(--accent);
 }
 
-button {
-    margin-top: 10px;
-    padding: 10px 20px;
-    background: #ff1a1a;
+.game-story,
+.game-explanation,
+.game-task{
+    background: var(--card);
+    padding: 20px;
+    border-left: 4px solid var(--accent);
+    margin-bottom: 20px;
+    border-radius: 6px;
+}
+
+.editor-container{
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+#editor{
+    flex: 1;
+    height: 150px;
+    background: black;
+    color: #00ff00;
+    border: 2px solid var(--accent);
+    padding: 10px;
+    border-radius: 6px;
+}
+
+#runBtn{
+    width: 150px;
+    background: var(--accent);
     border: none;
-    border-radius: 5px;
-    font-weight: bold;
+    color: white;
     cursor: pointer;
+    border-radius: 6px;
+    font-weight: bold;
+    transition: .2s;
 }
 
-button:hover {
-    background: #b30000;
+#runBtn:hover{
+    background: var(--accent-light);
 }
 
-/* FEEDBACK */
-
-.success {
-    background: #004d00;
-    color: #99ff99;
+.result{
+    min-height: 40px;
     padding: 10px;
-    border-radius: 5px;
+    font-size: 18px;
 }
 
-.error {
-    background: #4d0000;
-    color: #ff9999;
-    padding: 10px;
-    border-radius: 5px;
-}
 
-footer {
-    background: #140000;
-    color: #ff1a1a;
-    padding: 10px;
+/* Footer */
+.footer{
     text-align: center;
+    padding: 10px;
+    background: #131213;
+    border-top: 2px solid var(--accent);
 }

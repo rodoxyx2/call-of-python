@@ -48,3 +48,55 @@
 
 </body>
 </html>
+a<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Aprende Python - Game Mode</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="layout">
+
+        <aside class="sidebar">
+            <h2 class="logo">PYTHON ARENA</h2>
+
+            <nav id="levelsMenu">
+                <div class="menu-title">Niveles</div>
+                <!-- Se llenará dinámicamente -->
+            </nav>
+
+        </aside>
+
+        <main class="game-container">
+
+            <header class="game-header">
+                <h1 id="levelTitle">Bienvenido Soldado</h1>
+            </header>
+
+            <section id="story" class="game-story">
+                <p>Completa misiones de programación para desbloquear nuevos niveles y convertirte en Master Python.</p>
+            </section>
+
+            <section class="game-explanation" id="explanation"></section>
+
+            <section class="game-task" id="task"></section>
+
+            <div class="editor-container">
+                <textarea id="editor" placeholder="Escribe tu código aquí..."></textarea>
+                <button id="runBtn">EJECUTAR</button>
+            </div>
+
+            <div class="result" id="result"></div>
+
+        </main>
+
+    </div>
+
+    <footer class="footer">
+        Python Arena - 2025
+    </footer>
+
+<script src="script.js"></script>
+</body>
+</html>

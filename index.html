@@ -1,102 +1,75 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Campaña Python</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Python Arena — Aprende por Niveles</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="app">
+    <!-- SIDEBAR: Niveles -->
+    <aside class="sidebar" id="sidebar" aria-label="Niveles">
+      <div class="brand">
+        <div class="logo">PYTHON ARENA</div>
+        <div class="sub">Campaña — Modo Shooter</div>
+      </div>
 
-    <header>
-        <h1>Python: Campaña de Entrenamiento</h1>
-    </header>
+      <nav id="levelsList" class="levels-list" role="navigation" aria-label="Lista de niveles">
+        <!-- Niveles generados por script.js -->
+      </nav>
 
-    <div class="container">
+      <div class="progress">
+        <small>Progreso:</small>
+        <div id="progressBar" class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
+        <small id="progressText">0 / 0 completados</small>
+      </div>
+    </aside>
 
-        <nav class="sidebar" id="sidebar">
-            <ul>
-                <li data-topic="intro" class="active">Introducción</li>
-                <li data-topic="level1" class="">Nivel 1: Variables</li>
-                <li data-topic="level2" class="locked">Nivel 2: Tipos</li>
-                <li data-topic="level3" class="locked">Nivel 3: Condicionales</li>
-                <li data-topic="level4" class="locked">Nivel 4: Bucles</li>
-                <li data-topic="final" class="locked">Final Boss</li>
-            </ul>
-        </nav>
+    <!-- MAIN: contenido del nivel -->
+    <main class="main">
+      <header class="main-header">
+        <h1 id="levelTitle">Bienvenido, recluta</h1>
+        <p id="levelSubtitle">Completa misiones para desbloquear nuevos niveles.</p>
+      </header>
 
-        <main class="content">
+      <section class="card" id="theoryCard" aria-live="polite">
+        <h2>Teoría</h2>
+        <div id="theoryHtml" class="card-body">Selecciona un nivel en la izquierda para ver la teoría.</div>
+      </section>
 
-            <section id="theory" class="box"></section>
+      <section class="card" id="taskCard">
+        <h2>Desafío</h2>
+        <div id="taskHtml" class="card-body">Selecciona un nivel para ver el reto.</div>
+      </section>
 
-            <section class="box">
-                <h3>Editor</h3>
-                <textarea id="editor" placeholder="Escribe tu código aquí..."></textarea>
-                <button id="run">Ejecutar</button>
-            </section>
+      <section class="card" id="editorCard">
+        <h2>Editor (simulación)</h2>
+        <div class="editor-wrapper">
+          <pre id="highlight" class="highlight" aria-hidden="true"></pre>
+          <textarea id="codeEditor" class="code-editor" spellcheck="false" placeholder="# Escribe tu código aquí..."></textarea>
+        </div>
 
-            <section id="feedback" class="box"></section>
+        <div class="controls">
+          <button id="runBtn" class="btn primary">EJECUTAR / VERIFICAR</button>
+          <button id="resetBtn" class="btn">Restablecer</button>
+          <div class="hint">Pista: comentarios con <code>#</code> — las cadenas usan comillas</div>
+        </div>
 
-        </main>
-    </div>
+        <div id="output" class="output" aria-live="assertive"></div>
+      </section>
 
-    <footer>
-        <p>Hecho con furia gamer y Python simulado</p>
-    </footer>
+      <section class="card state-card" id="stateCard">
+        <h2>Estado (simulado)</h2>
+        <pre id="stateView">{ }</pre>
+      </section>
+    </main>
+  </div>
 
-    <script src="script.js"></script>
+  <footer class="footer">
+    <small>Python Arena — Prototipo educativo • Guardado automático de progreso</small>
+  </footer>
 
-</body>
-</html>
-a<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Aprende Python - Game Mode</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="layout">
-
-        <aside class="sidebar">
-            <h2 class="logo">PYTHON ARENA</h2>
-
-            <nav id="levelsMenu">
-                <div class="menu-title">Niveles</div>
-                <!-- Se llenará dinámicamente -->
-            </nav>
-
-        </aside>
-
-        <main class="game-container">
-
-            <header class="game-header">
-                <h1 id="levelTitle">Bienvenido Soldado</h1>
-            </header>
-
-            <section id="story" class="game-story">
-                <p>Completa misiones de programación para desbloquear nuevos niveles y convertirte en Master Python.</p>
-            </section>
-
-            <section class="game-explanation" id="explanation"></section>
-
-            <section class="game-task" id="task"></section>
-
-            <div class="editor-container">
-                <textarea id="editor" placeholder="Escribe tu código aquí..."></textarea>
-                <button id="runBtn">EJECUTAR</button>
-            </div>
-
-            <div class="result" id="result"></div>
-
-        </main>
-
-    </div>
-
-    <footer class="footer">
-        Python Arena - 2025
-    </footer>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

@@ -1,155 +1,201 @@
-/* Colores base */
-:root {
-    --bg: #0d0c0d;
-    --card: #19181a;
-    --accent: #e31b2d;
-    --accent-light: #ff5a69;
-    --text: #f2f2f2;
+/* style.css — Paleta: rojo oscuro + neon. UI tipo shooter, responsiva */
+
+/* Variables de color */
+:root{
+  --bg: #0b0b0c;
+  --panel: #151318;
+  --accent: #e11d2f;       /* rojo neon */
+  --accent-2: #ff5a6a;     /* rojo claro */
+  --muted: #7a6a6f;
+  --text: #f4eef6;
+  --glass: rgba(255,255,255,0.02);
+  --card-border: rgba(225,29,47,0.14);
 }
 
-/* Reset básico */
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Consolas", monospace;
-}
-
+/* Reset y base */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body,#app{height:100%}
 body{
-    background: var(--bg);
-    color: var(--text);
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
+  background:linear-gradient(180deg,#070607 0%, #0b0b0c 100%);
+  color:var(--text);
+  font-family: Inter, ui-sans-serif, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  -webkit-font-smoothing:antialiased;
+  display:flex;
+  min-height:100vh;
+  flex-direction:column;
 }
 
-.layout{
-    display: flex;
-    flex: 1;
-    overflow: hidden;
+/* Layout principal */
+.app{
+  display:flex;
+  gap:18px;
+  max-width:1200px;
+  margin:20px auto;
+  width:calc(100% - 40px);
+  flex:1;
 }
 
-/* Sidebar */
+/* SIDEBAR */
 .sidebar{
-    width: 250px;
-    background: #141315;
-    padding: 20px;
-    border-right: 2px solid var(--accent);
-    display: flex;
-    flex-direction: column;
+  width:260px;
+  background:linear-gradient(180deg,var(--panel), #110f12);
+  border:1px solid var(--card-border);
+  padding:18px;
+  border-radius:12px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+  display:flex;
+  flex-direction:column;
+  gap:14px;
 }
 
+.brand{ text-align:center; margin-bottom:6px; }
 .logo{
-    color: var(--accent-light);
-    text-align: center;
-    margin-bottom: 25px;
-    font-size: 26px;
-    letter-spacing: 1px;
-    text-shadow: 0 0 10px var(--accent);
+  font-weight:800;
+  letter-spacing:2px;
+  color:var(--accent-2);
+  font-size:20px;
+  text-shadow:0 0 12px rgba(225,29,47,0.14);
 }
+.sub{ color:var(--muted); font-size:12px; margin-top:4px; }
 
-.menu-title{
-    margin-bottom: 10px;
-    font-size: 18px;
-    color: var(--accent-light);
-}
-
+/* Levels menu */
+.levels-list{ display:flex; flex-direction:column; gap:8px; overflow:auto; padding-right:6px; }
 .level-btn{
-    margin: 6px 0;
-    padding: 10px;
-    width: 100%;
-    background: var(--card);
-    border: 1px solid var(--accent);
-    color: var(--text);
-    cursor: pointer;
-    text-align: left;
-    border-radius: 6px;
-    transition: 0.2s;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:10px 12px;
+  background:transparent;
+  border-radius:10px;
+  color:var(--text);
+  border:1px solid transparent;
+  cursor:pointer;
+  transition:all .18s ease;
+  font-weight:600;
+  font-size:14px;
 }
-
-.level-btn.active{
-    background: var(--accent);
-}
-
+.level-btn .meta{ font-size:12px; color:var(--muted); }
+.level-btn:hover{ transform:translateX(6px); box-shadow:0 6px 18px rgba(225,29,47,0.06) }
+.level-btn.active{ background:linear-gradient(90deg,var(--accent) 0%, var(--accent-2) 70%); color:#0a0a0a; box-shadow:0 10px 30px rgba(225,29,47,0.14) }
 .level-btn.locked{
-    color: #777;
-    border: 1px solid #555;
-    cursor: not-allowed;
+  opacity:0.45;
+  color:#8f7b7f;
+  cursor:not-allowed;
+  border:1px dashed rgba(255,255,255,0.02);
 }
 
-.level-btn:hover:not(.locked){
-    background: var(--accent-light);
+/* Progress */
+.progress{ margin-top:auto; display:flex; flex-direction:column; gap:8px; }
+.progress-bar{ height:10px; background:transparent; border-radius:999px; border:1px solid rgba(255,255,255,0.03); overflow:hidden }
+.progress-fill{ height:100%; width:0%; background:linear-gradient(90deg,var(--accent),var(--accent-2)); transition:width .35s ease; border-radius:999px; box-shadow:0 4px 12px rgba(225,29,47,0.16) }
+.progress small{ color:var(--muted); font-size:12px }
+
+/* MAIN */
+.main{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  min-width:0;
 }
 
+/* Header dentro del main */
+.main-header{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+#levelTitle{ font-size:22px; color:var(--accent-2); text-shadow:0 0 12px rgba(225,29,47,0.12) }
+#levelSubtitle{ color:var(--muted); font-size:13px }
 
-/* Main */
-.game-container{
-    flex: 1;
-    padding: 30px;
-    overflow-y: auto;
+/* Cards */
+.card{
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border:1px solid var(--card-border);
+  padding:14px;
+  border-radius:10px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+}
+.card h2{ margin-bottom:8px; color:var(--accent-2) }
+
+/* Editor */
+.editor-wrapper{
+  position:relative;
+  border-radius:8px;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,0.03);
+  background:#070707;
+  min-height:160px;
+  max-height:360px;
+}
+.highlight{
+  margin:0;
+  padding:14px;
+  font-family: "Fira Code", ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
+  font-size:13px;
+  line-height:1.5;
+  white-space:pre-wrap;
+  word-break:break-word;
+  color:transparent; /* el color viene por spans */
+  pointer-events:none;
+  background:linear-gradient(180deg,#050505,#080808);
+}
+.code-editor{
+  position:absolute;
+  inset:0;
+  padding:14px;
+  margin:0;
+  border:0;
+  background:transparent;
+  color:var(--accent-2);
+  font-family: "Fira Code", monospace;
+  font-size:13px;
+  line-height:1.5;
+  resize:vertical;
+  outline:none;
 }
 
-.game-header{
-    margin-bottom: 20px;
+/* token styles: simple */
+.kw{ color:#ff9fb1; font-weight:700 }
+.num{ color:#ffb86b }
+.str{ color:#8be9a1 }
+.cm{ color:#7e7d88; font-style:italic }
+.builtin{ color:#9aedff }
+.varname{ color:#ffd6e0 }
+
+/* Controls */
+.controls{ display:flex; align-items:center; gap:10px; margin-top:12px; flex-wrap:wrap }
+.btn{
+  padding:10px 14px;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,0.03);
+  background:transparent;
+  color:var(--text);
+  cursor:pointer;
+  font-weight:700;
 }
-
-#levelTitle{
-    font-size: 28px;
-    text-shadow: 0 0 10px var(--accent);
+.btn.primary{
+  background:linear-gradient(90deg,var(--accent),var(--accent-2));
+  color:#070707;
+  box-shadow:0 10px 30px rgba(225,29,47,0.12);
 }
+.hint{ margin-left:auto; color:var(--muted); font-size:13px }
 
-.game-story,
-.game-explanation,
-.game-task{
-    background: var(--card);
-    padding: 20px;
-    border-left: 4px solid var(--accent);
-    margin-bottom: 20px;
-    border-radius: 6px;
-}
+/* Output & state */
+.output{ margin-top:12px; min-height:48px; font-weight:700; font-size:14px }
+.output .ok{ color:#7fffd4 }
+.output .bad{ color:#ff9f9f }
+.state-card pre{ background:transparent; border:0; color:var(--muted); font-family:monospace; padding:8px; }
 
-.editor-container{
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-}
+/* FOOTER */
+.footer{ text-align:center; padding:12px; color:var(--muted); font-size:13px; margin-top:10px }
 
-#editor{
-    flex: 1;
-    height: 150px;
-    background: black;
-    color: #00ff00;
-    border: 2px solid var(--accent);
-    padding: 10px;
-    border-radius: 6px;
-}
-
-#runBtn{
-    width: 150px;
-    background: var(--accent);
-    border: none;
-    color: white;
-    cursor: pointer;
-    border-radius: 6px;
-    font-weight: bold;
-    transition: .2s;
-}
-
-#runBtn:hover{
-    background: var(--accent-light);
-}
-
-.result{
-    min-height: 40px;
-    padding: 10px;
-    font-size: 18px;
-}
-
-
-/* Footer */
-.footer{
-    text-align: center;
-    padding: 10px;
-    background: #131213;
-    border-top: 2px solid var(--accent);
+/* Responsive */
+@media (max-width:920px){
+  .app{ flex-direction:column; width:calc(100% - 24px); margin:12px auto }
+  .sidebar{ width:100%; display:flex; flex-direction:row; gap:8px; overflow:auto; padding:12px }
+  .levels-list{ flex-direction:row; gap:8px }
+  .main{ padding-top:0 }
+  .brand{ display:none }
 }

@@ -1,75 +1,109 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Python Arena — Aprende por Niveles</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<title>Python Quest</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+body{background:#0d0d0d;color:#eee;display:flex;height:100vh}
+nav{width:220px;background:#1a0000;padding:10px;overflow-y:auto}
+nav h2{color:#ff4d4d;margin-bottom:10px;font-size:20px;text-align:center}
+nav ul{list-style:none}
+nav li{padding:8px;margin:6px 0;background:#330000;border-radius:5px;cursor:pointer;opacity:.6}
+nav li.active{background:#ff1a1a;opacity:1}
+nav li.unlocked{opacity:1}
+nav li.locked{cursor:not-allowed}
+main{flex:1;display:flex;flex-direction:column;padding:15px}
+header{padding:10px;background:#1a0000;border-radius:5px;margin-bottom:10px;font-size:22px}
+#content{flex:1;background:#190000;padding:15px;border-radius:5px;overflow:auto}
+textarea{width:100%;height:150px;background:#000;color:#fff;border:1px solid #ff1a1a;border-radius:5px;padding:8px;font-size:15px}
+button{padding:10px 15px;border:none;border-radius:5px;margin-top:10px;background:#ff1a1a;color:#fff;cursor:pointer}
+#msg{margin-top:10px;padding:8px;border-radius:5px}
+#msg.ok{background:#0f3;color:#000}
+#msg.err{background:#900}
+footer{padding:8px;text-align:center;color:#777;font-size:13px}
+</style>
 </head>
 <body>
-  <div class="app">
-    <!-- SIDEBAR: Niveles -->
-    <aside class="sidebar" id="sidebar" aria-label="Niveles">
-      <div class="brand">
-        <div class="logo">CALL OF PYTHON</div>
-        <div class="sub">Py-Learning</div>
-      </div>
 
-      <nav id="levelsList" class="levels-list" role="navigation" aria-label="Lista de niveles">
-        <!-- Niveles generados por script.js -->
-      </nav>
+<nav>
+<h2>Niveles</h2>
+<ul id="levels"></ul>
+</nav>
 
-      <div class="progress">
-        <small>Progreso:</small>
-        <div id="progressBar" class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
-        <small id="progressText">0 / 0 completados</small>
-      </div>
-    </aside>
+<main>
+<header id="title">Python Quest</header>
+<div id="content"></div>
+<footer>Proyecto educativo</footer>
+</main>
 
-    <!-- MAIN: contenido del nivel -->
-    <main class="main">
-      <header class="main-header">
-        <h1 id="levelTitle">Bienvenido, recluta</h1>
-        <p id="levelSubtitle">Completa misiones para desbloquear nuevos niveles.</p>
-      </header>
+<script>
+// --- DATA DEL JUEGO ---
+const levels=[
+{title:"Introducción",unlocked:true,desc:"Aprenderás Python desde cero.",task:null,solution:null},
+{title:"Nivel 1: Variables",unlocked:true,desc:"Declara una variable llamada edad con valor 25.",task:"edad = 25",solution:/edad\s*=\s*25/},
+{title:"Nivel 2: Strings",unlocked:false,desc:"Crea una variable nombre con valor 'Ana'.",task:"nombre = 'Ana'",solution:/nombre\s*=\s*['\"]Ana['\"]/},
+{title:"Nivel 3: Condicionales",unlocked:false,desc:"Si number es mayor a 10 imprime 'alto'.",task:"number=11\nif number>10:\n    print('alto')",solution:/if\s+number\s*>\s*10/},
+{title:"Nivel 4: Bucles",unlocked:false,desc:"Crea un for que imprima 0 al 4.",task:"for i in range(5): print(i)",solution:/for/},
+{title:"Nivel 5: Listas",unlocked:false,desc:"Crea una lista con tres frutas.",task:"frutas=['a','b','c']",solution:/\[/},
+{title:"Nivel Final",unlocked:false,desc:"Crea una función que retorne 'GG'.",task:"def f(): return 'GG'",solution:/def/}
+];
 
-      <section class="card" id="theoryCard" aria-live="polite">
-        <h2>Teoría</h2>
-        <div id="theoryHtml" class="card-body">Selecciona un nivel en la izquierda para ver la teoría.</div>
-      </section>
+// --- RENDER MENU ---
+const ul=document.querySelector("#levels");
+function drawMenu(){
+ul.innerHTML="";
+levels.forEach((lv,i)=>{
+let li=document.createElement("li");
+li.textContent=lv.title;
+li.className=lv.unlocked?"unlocked":"locked";
+li.onclick=()=>lv.unlocked?openLevel(i):null;
+if(i===current)li.classList.add("active");
+ul.appendChild(li);
+});
+}
 
-      <section class="card" id="taskCard">
-        <h2>Desafío</h2>
-        <div id="taskHtml" class="card-body">Selecciona un nivel para ver el reto.</div>
-      </section>
+// --- RENDER CONTENT ---
+let current=0;
+function openLevel(i){
+current=i;
+drawMenu();
+let lv=levels[i];
+let html=`<h3>${lv.title}</h3><p>${lv.desc}</p>`;
+if(lv.solution){
+html+=`<textarea id='code' placeholder='Escribe tu código...'></textarea>
+<button onclick='check()'>Ejecutar</button><div id='msg'></div>`;
+}
+document.querySelector("#content").innerHTML=html;
+document.querySelector("#title").textContent=lv.title;
+}
 
-      <section class="card" id="editorCard">
-        <h2>Editor (simulación)</h2>
-        <div class="editor-wrapper">
-          <pre id="highlight" class="highlight" aria-hidden="true"></pre>
-          <textarea id="codeEditor" class="code-editor" spellcheck="false" placeholder="# Escribe tu código aquí..."></textarea>
-        </div>
+// --- VALIDACIÓN ---
+function check(){
+let code=document.querySelector("#code").value;
+let lv=levels[current];
+let msg=document.querySelector("#msg");
+if(lv.solution.test(code)){
+msg.textContent="Correcto, avanzas!";
+msg.className="ok";
+unlock();
+}else{
+msg.textContent="Incorrecto, revisa tu código.";
+msg.className="err";
+}
+}
 
-        <div class="controls">
-          <button id="runBtn" class="btn primary">EJECUTAR / VERIFICAR</button>
-          <button id="resetBtn" class="btn">Restablecer</button>
-          <div class="hint">Pista: comentarios con <code>#</code> — las cadenas usan comillas</div>
-        </div>
+// --- DESBLOQUEO ---
+function unlock(){
+if(current+1<levels.length){
+levels[current+1].unlocked=true;
+drawMenu();
+}
+}
 
-        <div id="output" class="output" aria-live="assertive"></div>
-      </section>
-
-      <section class="card state-card" id="stateCard">
-        <h2>Estado (simulado)</h2>
-        <pre id="stateView">{ }</pre>
-      </section>
-    </main>
-  </div>
-
-  <footer class="footer">
-    <small>Python Arena — Prototipo educativo • Guardado automático de progreso</small>
-  </footer>
-
-  <script src="script.js"></script>
+// INIT
+drawMenu();
+openLevel(0);
+</script>
 </body>
 </html>

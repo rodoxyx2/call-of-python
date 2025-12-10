@@ -1,152 +1,193 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8" />
 <title>Call-Of-Python</title>
 <style>
-    body{font-family:Arial;display:flex;margin:0;background:#120007;color:white;}
-    #sidebar{width:220px;background:#2b0010;padding:20px;height:100vh;overflow-y:auto;border-right:3px solid #ff002b;}
-    #sidebar h2{color:#ff003c;}
-    .mission-title{margin-top:20px;color:#ff8aa3;font-size:18px;font-weight:bold;}
-    .level{margin:8px 0;padding:8px;background:#3d0016;border-left:4px solid #ff003c;cursor:pointer;}
-    .locked{opacity:0.4;pointer-events:none;}
-    #content{flex:1;padding:20px;}
-    textarea{width:95%;height:150px;background:black;color:#00ffea;border:2px solid #ff003c;padding:10px;}
-    #runBtn{padding:10px 20px;background:#ff003c;border:none;color:white;margin-top:10px;cursor:pointer;font-weight:bold;}
-    #msg{margin-top:15px;padding:10px;border-radius:5px;}
-    pre.example{background:#0f0f0f;padding:10px;color:#9efff3;border-radius:6px;}
+  body{font-family:Arial;margin:0;display:flex;background:#120007;color:#fff;height:100vh;}
+  #sidebar{width:220px;background:#2b0010;padding:18px;height:100vh;overflow:auto;border-right:3px solid #ff002b}
+  #sidebar h2{color:#ff003c;margin:0 0 10px}
+  .mission-title{margin-top:16px;color:#ff8aa3;font-weight:700}
+  .level{margin:8px 0;padding:8px;background:#3d0016;border-left:4px solid #ff003c;cursor:pointer;border-radius:4px}
+  .locked{opacity:.4;pointer-events:none}
+  #content{flex:1;padding:20px;overflow:auto}
+  textarea{width:95%;height:150px;background:#000;color:#0ff;padding:10px;border:2px solid #ff003c;border-radius:6px;font-family:monospace}
+  button{margin-top:10px;padding:10px 16px;background:#ff003c;border:none;color:#fff;border-radius:6px;cursor:pointer;font-weight:700}
+  #msg{margin-top:14px;padding:10px;border-radius:6px}
+  pre.example{background:#0f0f0f;padding:10px;color:#9efff3;border-radius:6px}
+  /* PYSHOT overlay */
+  #pyshotOverlay{position:fixed;left:0;top:0;width:100%;height:100%;display:none;
+    background:rgba(0,0,0,.8);z-index:50;align-items:center;justify-content:center}
+  #pyshotOverlay h1{font-size:72px;color:#ff3030;text-shadow:0 0 30px #ff3030;transform:scale(0);animation:pop .5s forwards}
+  @keyframes pop{to{transform:scale(1)}}
 </style>
 </head>
 <body>
 
 <div id="sidebar">
-    <h2>CALL-OF-PYTHON</h2>
+  <h2>CALL-OF-PYTHON</h2>
 
-    <div class="mission-title">Introducción</div>
-    <div class="level" onclick="loadLevel('intro')" id="introBtn">¿Qué es Python?</div>
+  <div class="mission-title">Introducción</div>
+  <div class="level" onclick="loadLevel('intro')" id="introBtn">¿Qué es Python?</div>
 
-    <div class="mission-title">Misión 1: Fundamentos</div>
-    <div class="level" onclick="loadLevel(1)">Nivel 1</div>
-    <div class="level locked" id="lvl2" onclick="loadLevel(2)">Nivel 2</div>
-    <div class="level locked" id="lvl3" onclick="loadLevel(3)">Nivel 3</div>
+  <div class="mission-title">Misión 1: Fundamentos</div>
+  <div class="level" onclick="loadLevel(1)" id="lvl1">Nivel 1</div>
+  <div class="level locked" id="lvl2" onclick="loadLevel(2)">Nivel 2</div>
+  <div class="level locked" id="lvl3" onclick="loadLevel(3)">Nivel 3</div>
 
-    <div class="mission-title">Misión 2: Condiciones</div>
-    <div class="level locked" id="lvl4" onclick="loadLevel(4)">Nivel 4</div>
-    <div class="level locked" id="lvl5" onclick="loadLevel(5)">Nivel 5</div>
-
+  <div class="mission-title">Misión 2: Condiciones</div>
+  <div class="level locked" id="lvl4" onclick="loadLevel(4)">Nivel 4</div>
+  <div class="level locked" id="lvl5" onclick="loadLevel(5)">Nivel 5</div>
 </div>
 
 <div id="content">
-    <h1 id="title"></h1>
-    <p id="desc"></p>
+  <h1 id="title"></h1>
+  <p id="desc"></p>
 
-    <h3>Ejemplo:</h3>
-    <pre id="example" class="example">—</pre>
+  <h3>Ejemplo:</h3>
+  <pre id="example" class="example">—</pre>
 
-    <!-- editor y botón estarán aquí sólo para niveles que lo requieran -->
-    <div id="exerciseArea" style="display:none;">
-      <textarea id="code"></textarea><br>
-      <button id="runBtn" onclick="runLevel()">Ejecutar</button>
-    </div>
+  <div id="exerciseArea" style="display:none">
+    <textarea id="code" placeholder="# Escribe tu código aquí..."></textarea><br>
+    <button id="runBtn" onclick="runLevel()">Ejecutar</button>
+  </div>
 
-    <div id="msg"></div>
+  <div id="msg"></div>
 </div>
 
-<script>
-// estado
-let currentLevel = null;
-let unlocked = 1;
+<!-- PYSHOT overlay -->
+<div id="pyshotOverlay"><h1>PYSHOT</h1></div>
 
-// datos de niveles (ejemplos añadidos)
+<script>
+// ----------------- Datos de niveles (con ejemplos) -----------------
 const levels = {
-    intro:{
-        title:"Introducción a Python",
-        desc:"Python es un lenguaje fácil de leer, ideal para principiantes y usado en ciencia de datos, servidores e IA.",
-        example:`print("Bienvenido soldado, a Call-Of-Python")`
-    },
-    1:{
-        title:"Nivel 1 — Variables",
-        desc:"Crea una variable llamada 'x' con el valor 10.",
-        example:`x = 10\nprint(x)`,
-        check:/x\s*=\s*10/
-    },
-    2:{
-        title:"Nivel 2 — Strings",
-        desc:"Crea una variable nombre con tu nombre entre comillas.",
-        example:`nombre = "Rodelina"\nprint(nombre)`,
-        check:/nombre\s*=\s*".+"/
-    },
-    3:{
-        title:"Nivel 3 — Concatenación",
-        desc:"Usa print para imprimir: Hola + el nombre guardado.",
-        example:`nombre = "Ana"\nprint("Hola " + nombre)`,
-        check:/print\(\s*"Hola"\s*\+\s*nombre\s*\)/
-    },
-    4:{
-        title:"Nivel 4 — Condicional básico",
-        desc:"Haz un if que imprima 'Mayor' si número es mayor que 10.",
-        example:`numero = 15\nif numero > 10:\n    print("Mayor")`,
-        check:/if\s+.*>\s*10:/
-    },
-    5:{
-        title:"Nivel 5 — Condicional else",
-        desc:"Haz que si número NO es mayor que 10 imprima 'No es mayor'.",
-        example:`numero = 5\nif numero > 10:\n    print("Mayor")\nelse:\n    print("No es mayor")`,
-        check:/else:/
-    }
+  intro: {
+    title: "Introducción a Python",
+    desc: "Python es un lenguaje fácil de leer y muy usado en ciencia de datos, servidores y automatización.",
+    example: `print("Bienvenido soldado, a Call-Of-Python")`
+  },
+  1: {
+    title: "Nivel 1 — Variables",
+    desc: "Declara una variable llamada x con valor 10.",
+    example: `x = 10\nprint(x)`,
+    check: /x\s*=\s*10/
+  },
+  2: {
+    title: "Nivel 2 — Strings",
+    desc: "Crea una variable nombre con tu nombre entre comillas.",
+    example: `nombre = "Rodelina"\nprint(nombre)`,
+    check: /nombre\s*=\s*["'].*["']/
+  },
+  3: {
+    title: "Nivel 3 — Concatenación",
+    desc: "Usa print para imprimir: Hola + nombre.",
+    example: `nombre = "Ana"\nprint("Hola " + nombre)`,
+    check: /print\s*\(\s*["']Hola\s*["']\s*\+\s*nombre\s*\)/
+  },
+  4: {
+    title: "Nivel 4 — Condicional básico",
+    desc: "Haz un if que imprima 'Mayor' si número > 10.",
+    example: `numero = 15\nif numero > 10:\n    print("Mayor")`,
+    check: /if\s+.*>\s*10\s*:/
+  },
+  5: {
+    title: "Nivel 5 — Condicional else",
+    desc: "Si número no es mayor que 10, imprime 'No es mayor'.",
+    example: `numero = 5\nif numero > 10:\n    print("Mayor")\nelse:\n    print("No es mayor")`,
+    check: /else\s*:/
+  }
 };
 
-// carga de nivel: muestra u oculta editor según exista 'check'
-function loadLevel(n){
-    currentLevel = n;
-    const lvl = levels[n];
-    document.getElementById("title").textContent = lvl.title;
-    document.getElementById("desc").textContent = lvl.desc;
-    document.getElementById("example").textContent = lvl.example;
-    document.getElementById("msg").textContent = "";
-    // mostrar editor solo si hay validación
-    if(lvl.check){
-        document.getElementById("exerciseArea").style.display = "block";
-        document.getElementById("code").value = "";
+// -------------- Estado y utiles --------------
+let currentLevel = null;
+let unlocked = 1; // hasta dónde desbloqueado (1 = nivel1)
+const exampleEl = document.getElementById("example");
+const titleEl = document.getElementById("title");
+const descEl = document.getElementById("desc");
+const exerciseArea = document.getElementById("exerciseArea");
+const msgEl = document.getElementById("msg");
+const pyshot = document.getElementById("pyshotOverlay");
+
+// -------------- Cargar nivel (muestra u oculta editor según tenga check) --------------
+function loadLevel(id) {
+  currentLevel = id;
+  const lvl = levels[id];
+  titleEl.textContent = lvl.title;
+  descEl.textContent = lvl.desc;
+  exampleEl.textContent = lvl.example;
+  msgEl.textContent = "";
+  // Si el nivel tiene validación (check), mostramos editor; si no (intro), lo ocultamos.
+  if (lvl.check) {
+    exerciseArea.style.display = "block";
+    document.getElementById("code").value = "";
+  } else {
+    exerciseArea.style.display = "none";
+  }
+}
+
+// -------------- Éxito / fallo / desbloqueo (restauradas) --------------
+function success(message) {
+  msgEl.style.background = "#003b12";
+  msgEl.textContent = "¡Py-SHOT! Nivel completado. " + (message || "");
+  // Mostrar overlay PYSHOT brevemente
+  pyshot.style.display = "flex";
+  setTimeout(() => pyshot.style.display = "none", 1200);
+  unlockNext();
+}
+
+function fail(message) {
+  msgEl.style.background = "#3b0000";
+  msgEl.textContent = "Error. " + (message || "Revisa el ejemplo.");
+}
+
+function unlockNext() {
+  // desbloquea siguiente nivel en orden numérico si existe y está bloqueado
+  const order = ["intro","1","2","3","4","5"];
+  const idx = order.indexOf(String(currentLevel));
+  if (idx >= 0 && idx < order.length - 1) {
+    const nextId = order[idx + 1];
+    const el = document.querySelector(`[data-id='${nextId}']`) || document.getElementById("lvl" + (idx+1));
+    if (el) el.classList.remove("locked");
+    unlocked = Math.max(unlocked, idx + 1);
+  }
+}
+
+// -------------- Ejecutar nivel (usa regex 'check' si existe) --------------
+function runLevel() {
+  if (!currentLevel) return;
+  const lvl = levels[currentLevel];
+  if (!lvl.check) return; // seguridad: no ejecutar intro
+  const code = document.getElementById("code").value;
+  try {
+    if (lvl.check.test(code)) {
+      success();
     } else {
-        document.getElementById("exerciseArea").style.display = "none";
+      fail("Código no cumple el patrón esperado.");
     }
+  } catch (e) {
+    fail("Error al validar.");
+    console.error(e);
+  }
 }
 
-// éxito
-function success(){
-    const msgEl = document.getElementById("msg");
-    msgEl.style.background="#003b12";
-    msgEl.textContent="¡Py-SHOT! Nivel completado.";
-    // desbloquea siguiente
-    unlocked++;
-    let next = document.getElementById("lvl"+unlocked);
-    if(next) next.classList.remove("locked");
-}
-
-// error
-function fail(){
-    const msgEl = document.getElementById("msg");
-    msgEl.style.background="#3b0000";
-    msgEl.textContent="Error soldado. Revisa el ejemplo.";
-}
-
-// ejecutar (solo niveles con 'check')
-function runLevel(){
-    if(!currentLevel) return;
-    let lvl = levels[currentLevel];
-    if(!lvl.check) return; // seguridad
-    let code = document.getElementById("code").value;
-    if(lvl.check.test(code)){
-        success();
-    } else {
-        fail();
+// -------------- Inicializar: asignar data-id a botones y cargar intro --------------
+(function init() {
+  // asignar data-id a los botones que no lo tenían (para unlockNext)
+  document.querySelectorAll("#sidebar .level").forEach(el=>{
+    if (!el.dataset.id) {
+      // intentar usar id existente (lvl2,lvl3...) si viene
+      if (el.id) el.dataset.id = el.id.replace("lvl","");
+      else {
+        // fallback: si el texto contiene "Nivel X" intentar extraer número
+        const m = el.textContent.match(/\d+/);
+        if (m) el.dataset.id = m[0];
+      }
     }
-}
+  });
+  // dejar intro cargado al inicio
+  loadLevel("intro");
+})();
 
-// inicializar en INTRO al cargar
-window.onload = ()=>{ loadLevel('intro'); };
 </script>
-
 </body>
 </html>

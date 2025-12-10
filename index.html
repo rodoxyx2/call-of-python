@@ -4,151 +4,177 @@
 <meta charset="UTF-8">
 <title>Call-Of-Python</title>
 <style>
-    body{margin:0;font-family:Arial;background:#0d0000;color:#fff;display:flex;height:100vh;}
-    #menu{width:220px;background:#1a0000;padding:15px;box-shadow:0 0 15px #900;}
-    #menu h2{text-align:center;color:#ff3333;margin-bottom:20px;font-size:22px;font-weight:bold;}
-    .lvl{padding:12px;background:#330000;margin-bottom:10px;cursor:pointer;border-left:5px solid #900;
-         opacity:.35;border-radius:4px;transition:.2s;font-size:15px;}
-    .lvl.unlocked{opacity:1;}
-    .lvl.active{background:#990000;border-left-color:#ff3333;}
-    #content{flex:1;padding:30px;overflow-y:auto;}
-    h1{color:#ff3b3b;margin-top:0;font-size:26px;}
-    textarea{width:100%;height:120px;background:#1a0000;color:#fff;border:1px solid #900;
-             padding:12px;font-size:15px;border-radius:4px;}
-    button{background:#ff3333;border:none;padding:10px 18px;color:#fff;border-radius:6px;cursor:pointer;}
-    .msg{margin-top:12px;padding:10px;border-radius:4px;font-size:15px;}
-    .ok{background:#003314;}
-    .bad{background:#4d0000;}
-
-    /* Pantalla PYSHOT */
-    #pyshot{
-        position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);
-        display:flex;justify-content:center;align-items:center;z-index:10;display:none;
+    body {
+        margin: 0; background: #0d0d0d; color: #fff;
+        font-family: 'Segoe UI', sans-serif;
+        display: flex; height: 100vh; overflow: hidden;
     }
-    #pyshot h1{
-        font-size:70px;color:#ff3333;text-shadow:0 0 30px #ff0000;font-weight:bold;
-        animation:pop .6s ease-out;
+    #sidebar {
+        width: 260px; background: #1a0000; padding: 15px;
+        overflow-y: auto; border-right: 2px solid #600;
     }
-    @keyframes pop{
-        0%{transform:scale(0);}
-        100%{transform:scale(1);}
+    h2 { color: #f33; margin-top: 0; text-align: center; }
+    .mission-title {
+        margin: 10px 0 5px; color: #ff5555; font-weight: bold;
+    }
+    .level {
+        padding: 8px; margin: 4px 0; background: #300;
+        border-radius: 6px; cursor: pointer;
+        transition: 0.2s;
+    }
+    .level.locked { opacity: 0.4; cursor: not-allowed; }
+    .level:hover:not(.locked) { background: #500; }
+    #content {
+        flex: 1; padding: 25px; overflow-y: auto;
+    }
+    #editor {
+        width: 100%; height: 160px; border-radius: 6px;
+        background: #111; color: #ff9999; border: 1px solid #600;
+        padding: 10px; margin-top: 10px; resize: vertical;
+        font-family: Consolas, monospace;
+    }
+    button {
+        margin-top: 10px; padding: 10px 15px;
+        background: #800; color: #fff; border: none;
+        border-radius: 6px; cursor: pointer;
+    }
+    #xpbar {
+        height: 20px; width: 100%; background: #300;
+        border-radius: 10px; margin-bottom: 10px;
+    }
+    #xpfill {
+        height: 100%; width: 0%; background: #f33;
+        border-radius: 10px; transition: width 0.4s;
+    }
+    #pyshot {
+        font-size: 28px; color: #ff3333; margin-top: 15px;
+        display: none; text-shadow: 0 0 10px #f33;
+        font-weight: bold;
     }
 </style>
 </head>
 <body>
 
-<!-- Pantalla de victoria -->
-<div id="pyshot"><h1>PYSHOT</h1></div>
-
-<div id="menu">
+<div id="sidebar">
     <h2>Call-Of-Python</h2>
-    <div class="lvl unlocked active" data-id="intro">Introducción</div>
-    <div class="lvl unlocked" data-id="n1">Nivel 1</div>
-    <div class="lvl" data-id="n2">Nivel 2</div>
-    <div class="lvl" data-id="n3">Nivel 3</div>
-    <div class="lvl" data-id="n4">Nivel 4</div>
+
+    <div id="xpbar"><div id="xpfill"></div></div>
+    <p style="text-align:center;">XP: <span id="xpshow">0</span></p>
+
+    <div class="mission-title">MISIÓN 1: Fundamentos</div>
+    <div class="level" data-id="intro">Introducción</div>
+    <div class="level" data-id="m1l1">Nivel Básico 1</div>
+    <div class="level locked" data-id="m1l2">Nivel Básico 2</div>
+    <div class="level locked" data-id="m1l3">Nivel Básico 3</div>
+
+    <div class="mission-title">MISIÓN 2: Operadores</div>
+    <div class="level locked" data-id="m2l1">Nivel 1</div>
+    <div class="level locked" data-id="m2l2">Nivel 2</div>
+    <div class="level locked" data-id="m2l3">Nivel 3</div>
+
+    <div class="mission-title">MISIÓN 3: Condiciones</div>
+    <div class="level locked" data-id="m3l1">Nivel 1</div>
+    <div class="level locked" data-id="m3l2">Nivel 2</div>
+    <div class="level locked" data-id="m3l3">Nivel 3</div>
 </div>
 
-<div id="content"></div>
+<div id="content">
+    <h1>Bienvenido Soldado</h1>
+    <p>Este es el campo de entrenamiento de <b>Call-Of-Python</b>. Completa misiones, gana XP y desbloquea niveles.</p>
+</div>
 
 <script>
-/* ---- Contenido de cada nivel ---- */
-const data={
-  intro:{
-    teoria:"Python es un lenguaje fácil, rápido de aprender y perfecto para empezar. En Call-Of-Python, cada misión te enseña algo nuevo.",
-    ejemplo:"Ejemplo: print('Bienvenido')",
-    reto:"Escribe un print que diga: CallOfPython",
-    sol:"print('CallOfPython')"
-  },
-  n1:{
-    teoria:"Las variables guardan datos. Puedes poner números, textos o lo que quieras.",
-    ejemplo:"Ejemplo: vida = 100",
-    reto:"Crea una variable nivel con valor 1.",
-    sol:"nivel = 1"
-  },
-  n2:{
-    teoria:"Los strings son textos entre comillas. Se usan para mensajes, nombres y más.",
-    ejemplo:"Ejemplo: nombre = 'Rodi'",
-    reto:"Crea una variable msg con el texto 'Hola'.",
-    sol:"msg = 'Hola'"
-  },
-  n3:{
-    teoria:"Los if sirven para tomar decisiones en el juego.",
-    ejemplo:"Ejemplo:\nif vida > 0:\n    print('Sigues viva')",
-    reto:"Haz un if que imprima 'Gana' si 5 es mayor que 1.",
-    sol:"if 5 > 1:\n    print('Gana')"
-  },
-  n4:{
-    teoria:"Los bucles se usan para repetir acciones como disparos, pasos o rondas.",
-    ejemplo:"Ejemplo:\nfor x in range(3):\n    print('Bang')",
-    reto:"Crea un bucle for que imprima 3 veces 'Py'.",
-    sol:"for i in range(3):\n    print('Py')"
-  }
+let xp = 0;
+const xpDisplay = document.getElementById("xpshow");
+const xpFill = document.getElementById("xpfill");
+const content = document.getElementById("content");
+const pyshot = document.createElement("div");
+pyshot.id = "pyshot"; pyshot.textContent = "PYSHOT!";
+content.appendChild(pyshot);
+
+// Niveles y respuestas esperadas
+const levels = {
+    intro: {
+        text: "<h1>¿Qué es Python?</h1><p>Python es un lenguaje de programación usado para crear juegos, apps, IA y más. Aquí aprenderás lo básico paso a paso.</p>",
+        xp: 10
+    },
+    m1l1: {
+        text: "<h1>Variables</h1><p>Crea una variable llamada <b>edad</b> con valor 20.</p><textarea id='editor'></textarea><button onclick='check(`edad = 20`)'>Verificar</button>",
+        xp: 20
+    },
+    m1l2: {
+        text: "<h1>Strings</h1><p>Crea una variable <b>nombre</b> con tu nombre dentro de comillas.</p><textarea id='editor'></textarea><button onclick='check(`nombre =`)'>Verificar</button>",
+        xp: 25
+    },
+    m1l3: {
+        text: "<h1>Print básico</h1><p>Escribe un print que muestre <b>Hola Python</b>.</p><textarea id='editor'></textarea><button onclick='check(`print(`)'>Verificar</button>",
+        xp: 30
+    },
+
+    m2l1: {
+        text: "<h1>Suma</h1><p>Crea una variable <b>total</b> que sea 5 + 3.</p><textarea id='editor'></textarea><button onclick='check(`total = 8`)'>Verificar</button>",
+        xp: 30
+    },
+    m2l2: {
+        text: "<h1>Multiplicación</h1><p>Crea una variable <b>doble</b> que sea 4 * 2.</p><textarea id='editor'></textarea><button onclick='check(`doble = 8`)'>Verificar</button>",
+        xp: 35
+    },
+    m2l3: {
+        text: "<h1>Operadores mixtos</h1><p>Crea una variable <b>resultado</b> que valga 10 - 3.</p><textarea id='editor'></textarea><button onclick='check(`resultado = 7`)'>Verificar</button>",
+        xp: 40
+    },
+
+    m3l1: {
+        text: "<h1>Condicional simple</h1><p>Escribe un if que compare si x es mayor que 5.</p><textarea id='editor'></textarea><button onclick='check(`if x >`)'>Verificar</button>",
+        xp: 35
+    },
+    m3l2: {
+        text: "<h1>If/Else</h1><p>Crea un condicional con else.</p><textarea id='editor'></textarea><button onclick='check(`else:`)'>Verificar</button>",
+        xp: 40
+    },
+    m3l3: {
+        text: "<h1>Comparación completa</h1><p>Escribe un if que imprima algo si edad &gt;= 18.</p><textarea id='editor'></textarea><button onclick='check(`>=`)'>Verificar</button>",
+        xp: 50
+    }
 };
 
-/* ---- Cambio de pantalla ---- */
-let actual="intro";
+// --- FUNCIONES ---
+function loadLevel(id) {
+    const levelEl = document.querySelector(`[data-id='${id}']`);
+    if (levelEl.classList.contains("locked")) return;
 
-function cargar(id){
-  actual=id;
-  document.querySelectorAll(".lvl").forEach(e=>{
-    e.classList.remove("active");
-    if(e.dataset.id===id) e.classList.add("active");
-  });
-
-  let d=data[id];
-  content.innerHTML=`
-    <h1>${id.toUpperCase()}</h1>
-    <p>${d.teoria}</p>
-    <pre>${d.ejemplo}</pre>
-    <p><b>Misión:</b> ${d.reto}</p>
-    <textarea id="code"></textarea><br>
-    <button onclick="check()">Disparar</button>
-    <div id="msg"></div>
-  `;
+    content.innerHTML = levels[id].text;
+    content.appendChild(pyshot);
 }
 
-document.querySelectorAll(".lvl").forEach(l=>{
-  l.onclick=()=>{
-    if(!l.classList.contains("unlocked")) return;
-    cargar(l.dataset.id);
-  };
+function addXP(amount) {
+    xp += amount;
+    xpDisplay.textContent = xp;
+    xpFill.style.width = Math.min(xp, 100) + "%";
+}
+
+function check(expected) {
+    const user = document.getElementById("editor").value;
+    if (user.includes(expected)) {
+        pyshot.style.display = "block";
+        setTimeout(() => pyshot.style.display = "none", 1200);
+        addXP(20);
+        unlockLevels();
+    } else alert("Revisa tu código, soldado.");
+}
+
+function unlockLevels() {
+    document.querySelectorAll(".locked").forEach(lvl => {
+        let need = 20; // XP necesario por nivel — dificultad suave
+        if (xp >= need) lvl.classList.remove("locked");
+        need += 20;
+    });
+}
+
+// Evento click en los niveles
+document.querySelectorAll(".level").forEach(lvl => {
+    lvl.onclick = () => loadLevel(lvl.dataset.id);
 });
-
-/* ---- Validar respuesta ---- */
-function check(){
-  let code=document.getElementById("code").value.trim();
-  let msg=document.getElementById("msg");
-
-  if(code===data[actual].sol){
-    msg.innerHTML="<div class='msg ok'>Perfecto, misión cumplida.</div>";
-    unlock();
-    pyshot();
-  }else{
-    msg.innerHTML="<div class='msg bad'>Error, revisa tu código.</div>";
-  }
-}
-
-/* ---- Desbloquear siguiente nivel ---- */
-function unlock(){
-  const orden=["intro","n1","n2","n3","n4"];
-  let idx=orden.indexOf(actual);
-  let next=orden[idx+1];
-  if(next){
-    document.querySelector(`[data-id='${next}']`).classList.add("unlocked");
-  }
-}
-
-/* ---- Mostrar pantalla PYSHOT ---- */
-function pyshot(){
-  let p=document.getElementById("pyshot");
-  p.style.display="flex";
-  setTimeout(()=>{ p.style.display="none"; },1500);
-}
-
-/* Cargar introducción al inicio */
-cargar("intro");
 </script>
-
 </body>
 </html>

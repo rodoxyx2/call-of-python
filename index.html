@@ -4,67 +4,17 @@
 <meta charset="UTF-8">
 <title>Call-Of-Python</title>
 <style>
-    body{
-        font-family: Arial, sans-serif;
-        display:flex;
-        margin:0;
-        background:#120007;
-        color:white;
-    }
-    #sidebar{
-        width:220px;
-        background:#2b0010;
-        padding:20px;
-        height:100vh;
-        overflow-y:auto;
-        border-right:3px solid #ff002b;
-    }
-    #sidebar h2{
-        color:#ff003c;
-    }
-    .locked{
-        opacity:0.4;
-        pointer-events:none;
-    }
-    .mission-title{
-        margin-top:20px;
-        color:#ff8aa3;
-        font-size:18px;
-        font-weight:bold;
-    }
-    .level{
-        margin:8px 0;
-        padding:8px;
-        background:#3d0016;
-        border-left:4px solid #ff003c;
-        cursor:pointer;
-    }
-    #content{
-        flex:1;
-        padding:20px;
-    }
-    textarea{
-        width:95%;
-        height:150px;
-        background:black;
-        color:#00ffea;
-        border:2px solid #ff003c;
-        padding:10px;
-    }
-    #runBtn{
-        padding:10px 20px;
-        background:#ff003c;
-        border:none;
-        color:white;
-        margin-top:10px;
-        cursor:pointer;
-        font-weight:bold;
-    }
-    #msg{
-        margin-top:15px;
-        padding:10px;
-        border-radius:5px;
-    }
+    body{font-family:Arial;display:flex;margin:0;background:#120007;color:white;}
+    #sidebar{width:220px;background:#2b0010;padding:20px;height:100vh;overflow-y:auto;border-right:3px solid #ff002b;}
+    #sidebar h2{color:#ff003c;}
+    .mission-title{margin-top:20px;color:#ff8aa3;font-size:18px;font-weight:bold;}
+    .level{margin:8px 0;padding:8px;background:#3d0016;border-left:4px solid #ff003c;cursor:pointer;}
+    .locked{opacity:0.4;pointer-events:none;}
+    #content{flex:1;padding:20px;}
+    textarea{width:95%;height:150px;background:black;color:#00ffea;border:2px solid #ff003c;padding:10px;}
+    #runBtn{padding:10px 20px;background:#ff003c;border:none;color:white;margin-top:10px;cursor:pointer;font-weight:bold;}
+    #msg{margin-top:15px;padding:10px;border-radius:5px;}
+    pre.example{background:#0f0f0f;padding:10px;color:#9efff3;border-radius:6px;}
 </style>
 </head>
 <body>
@@ -91,56 +41,53 @@
     <p id="desc"></p>
 
     <h3>Ejemplo:</h3>
-    <pre id="example" style="background:#0f0f0f; padding:10px; color:#9efff3;">—</pre>
+    <pre id="example" class="example">—</pre>
 
-    <textarea id="code"></textarea>
-    <br>
-    <button id="runBtn" onclick="runLevel()">Ejecutar</button>
+    <!-- editor y botón estarán aquí sólo para niveles que lo requieran -->
+    <div id="exerciseArea" style="display:none;">
+      <textarea id="code"></textarea><br>
+      <button id="runBtn" onclick="runLevel()">Ejecutar</button>
+    </div>
+
     <div id="msg"></div>
 </div>
 
 <script>
-// desbloqueo inicial
+// estado
 let currentLevel = null;
 let unlocked = 1;
 
-// base de datos de niveles
+// datos de niveles (ejemplos añadidos)
 const levels = {
     intro:{
         title:"Introducción a Python",
-        desc:"Python es un lenguaje de programación fácil de leer, ideal para principiantes y usado en ciencia de datos, servidores, IA y más.",
-        example:`print("Bienvenido soldado, a Call-Of-Python")`,
-        validate:(code)=>true
+        desc:"Python es un lenguaje fácil de leer, ideal para principiantes y usado en ciencia de datos, servidores e IA.",
+        example:`print("Bienvenido soldado, a Call-Of-Python")`
     },
-
     1:{
         title:"Nivel 1 — Variables",
         desc:"Crea una variable llamada 'x' con el valor 10.",
         example:`x = 10\nprint(x)`,
-        check:/x\s*=\s*10/,
+        check:/x\s*=\s*10/
     },
-
     2:{
         title:"Nivel 2 — Strings",
         desc:"Crea una variable nombre con tu nombre entre comillas.",
         example:`nombre = "Rodelina"\nprint(nombre)`,
         check:/nombre\s*=\s*".+"/
     },
-
     3:{
         title:"Nivel 3 — Concatenación",
         desc:"Usa print para imprimir: Hola + el nombre guardado.",
         example:`nombre = "Ana"\nprint("Hola " + nombre)`,
         check:/print\(\s*"Hola"\s*\+\s*nombre\s*\)/
     },
-
     4:{
         title:"Nivel 4 — Condicional básico",
         desc:"Haz un if que imprima 'Mayor' si número es mayor que 10.",
         example:`numero = 15\nif numero > 10:\n    print("Mayor")`,
         check:/if\s+.*>\s*10:/
     },
-
     5:{
         title:"Nivel 5 — Condicional else",
         desc:"Haz que si número NO es mayor que 10 imprima 'No es mayor'.",
@@ -149,7 +96,7 @@ const levels = {
     }
 };
 
-// carga de niveles
+// carga de nivel: muestra u oculta editor según exista 'check'
 function loadLevel(n){
     currentLevel = n;
     const lvl = levels[n];
@@ -157,13 +104,21 @@ function loadLevel(n){
     document.getElementById("desc").textContent = lvl.desc;
     document.getElementById("example").textContent = lvl.example;
     document.getElementById("msg").textContent = "";
-    document.getElementById("code").value = "";
+    // mostrar editor solo si hay validación
+    if(lvl.check){
+        document.getElementById("exerciseArea").style.display = "block";
+        document.getElementById("code").value = "";
+    } else {
+        document.getElementById("exerciseArea").style.display = "none";
+    }
 }
 
 // éxito
 function success(){
-    document.getElementById("msg").style.background="#003b12";
-    document.getElementById("msg").textContent="¡Py-SHOT! Nivel completado.";
+    const msgEl = document.getElementById("msg");
+    msgEl.style.background="#003b12";
+    msgEl.textContent="¡Py-SHOT! Nivel completado.";
+    // desbloquea siguiente
     unlocked++;
     let next = document.getElementById("lvl"+unlocked);
     if(next) next.classList.remove("locked");
@@ -171,32 +126,26 @@ function success(){
 
 // error
 function fail(){
-    document.getElementById("msg").style.background="#3b0000";
-    document.getElementById("msg").textContent="Error soldado. Revisa el ejemplo.";
+    const msgEl = document.getElementById("msg");
+    msgEl.style.background="#3b0000";
+    msgEl.textContent="Error soldado. Revisa el ejemplo.";
 }
 
-// ejecutar
+// ejecutar (solo niveles con 'check')
 function runLevel(){
     if(!currentLevel) return;
-
     let lvl = levels[currentLevel];
+    if(!lvl.check) return; // seguridad
     let code = document.getElementById("code").value;
-
-    if(lvl.validate){
-        success();
-        return;
-    }
     if(lvl.check.test(code)){
         success();
-    }else{
+    } else {
         fail();
     }
 }
 
-// ⭐ CARGAR INTRO AUTOMÁTICAMENTE ⭐
-window.onload = ()=>{
-    loadLevel("intro");
-};
+// inicializar en INTRO al cargar
+window.onload = ()=>{ loadLevel('intro'); };
 </script>
 
 </body>

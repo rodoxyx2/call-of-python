@@ -73,7 +73,7 @@
     <h2>CALL-OF-PYTHON</h2>
 
     <div class="mission-title">Introducción</div>
-    <div class="level" onclick="loadLevel('intro')">¿Qué es Python?</div>
+    <div class="level" onclick="loadLevel('intro')" id="introBtn">¿Qué es Python?</div>
 
     <div class="mission-title">Misión 1: Fundamentos</div>
     <div class="level" onclick="loadLevel(1)">Nivel 1</div>
@@ -87,8 +87,8 @@
 </div>
 
 <div id="content">
-    <h1 id="title">CALL-OF-PYTHON</h1>
-    <p id="desc">Selecciona una misión en el menú de la izquierda.</p>
+    <h1 id="title"></h1>
+    <p id="desc"></p>
 
     <h3>Ejemplo:</h3>
     <pre id="example" style="background:#0f0f0f; padding:10px; color:#9efff3;">—</pre>
@@ -100,15 +100,16 @@
 </div>
 
 <script>
+// desbloqueo inicial
 let currentLevel = null;
 let unlocked = 1;
 
-// base de datos de niveles con ejemplos añadidos
+// base de datos de niveles
 const levels = {
     intro:{
         title:"Introducción a Python",
-        desc:"Python es un lenguaje de programación fácil de leer, muy usado en ciencia de datos, inteligencia artificial y desarrollo web.",
-        example:`print("Hola soldado, bienvenido a Call-Of-Python")`,
+        desc:"Python es un lenguaje de programación fácil de leer, ideal para principiantes y usado en ciencia de datos, servidores, IA y más.",
+        example:`print("Bienvenido soldado, a Call-Of-Python")`,
         validate:(code)=>true
     },
 
@@ -148,16 +149,30 @@ const levels = {
     }
 };
 
-// cargar niveles
+// carga de niveles
 function loadLevel(n){
     currentLevel = n;
     const lvl = levels[n];
-
     document.getElementById("title").textContent = lvl.title;
     document.getElementById("desc").textContent = lvl.desc;
     document.getElementById("example").textContent = lvl.example;
     document.getElementById("msg").textContent = "";
     document.getElementById("code").value = "";
+}
+
+// éxito
+function success(){
+    document.getElementById("msg").style.background="#003b12";
+    document.getElementById("msg").textContent="¡Py-SHOT! Nivel completado.";
+    unlocked++;
+    let next = document.getElementById("lvl"+unlocked);
+    if(next) next.classList.remove("locked");
+}
+
+// error
+function fail(){
+    document.getElementById("msg").style.background="#3b0000";
+    document.getElementById("msg").textContent="Error soldado. Revisa el ejemplo.";
 }
 
 // ejecutar
@@ -171,7 +186,6 @@ function runLevel(){
         success();
         return;
     }
-
     if(lvl.check.test(code)){
         success();
     }else{
@@ -179,22 +193,10 @@ function runLevel(){
     }
 }
 
-// éxito
-function success(){
-    document.getElementById("msg").style.background="#003b12";
-    document.getElementById("msg").textContent="¡Py-SHOT! Nivel completado.";
-
-    // desbloquea siguiente
-    unlocked++;
-    let next = document.getElementById("lvl"+unlocked);
-    if(next) next.classList.remove("locked");
-}
-
-// error
-function fail(){
-    document.getElementById("msg").style.background="#3b0000";
-    document.getElementById("msg").textContent="Error soldado. Revisa el ejemplo.";
-}
+// ⭐ CARGAR INTRO AUTOMÁTICAMENTE ⭐
+window.onload = ()=>{
+    loadLevel("intro");
+};
 </script>
 
 </body>

@@ -3,32 +3,29 @@
 <head>
 <meta charset="utf-8" />
 <title>Call-Of-Python</title>
-
 <style>
   body{font-family:Arial;margin:0;display:flex;background:#120007;color:#fff;height:100vh;}
-  #sidebar{width:260px;background:#2b0010;padding:18px;height:100vh;overflow:auto;border-right:3px solid #ff002b}
-  #sidebar h2{color:#ff003c;margin:0 0 10px;font-size:22px}
-  .mission-title{margin-top:18px;color:#ff8aa3;font-weight:700;font-size:18px}
-  .sublevel-title{margin-left:10px;margin-top:10px;color:#fcb3c4;font-size:15px}
-  .level{margin:6px 0 6px 18px;padding:8px;background:#3d0016;border-left:4px solid #ff003c;cursor:pointer;
-         border-radius:4px;font-size:14px}
+  #sidebar{width:300px;background:#2b0010;padding:18px;height:100vh;overflow:auto;border-right:3px solid #ff002b}
+  #sidebar h2{color:#ff003c;margin:0 0 10px;font-size:20px}
+  .mission-title{margin-top:14px;color:#ff8aa3;font-weight:700;font-size:15px}
+  .sublevel-title{margin-left:8px;margin-top:8px;color:#fcb3c4;font-size:13px}
+  .level{margin:6px 0 6px 18px;padding:8px;background:#3d0016;border-left:4px solid #ff003c;cursor:pointer;border-radius:6px;font-size:13px}
   .locked{opacity:.35;pointer-events:none}
-
-  #content{flex:1;padding:20px;overflow:auto}
-  textarea{width:95%;height:150px;background:#000;color:#0ff;padding:10px;border:2px solid #ff003c;border-radius:6px;font-family:monospace}
-  button{margin-top:10px;padding:10px 16px;background:#ff003c;border:none;color:#fff;border-radius:6px;cursor:pointer;font-weight:700}
-  #msg{margin-top:14px;padding:10px;border-radius:6px}
-
-  /* Barra de XP */
-  #xpContainer{width:95%;background:#3d0016;border:2px solid #ff003c;height:25px;border-radius:8px;margin-top:10px}
-  #xpBar{height:100%;width:0%;background:#ff003c;border-radius:8px;transition:.3s}
-
-  pre.example{background:#0f0f0f;padding:10px;color:#9efff3;border-radius:6px}
-
+  .active{box-shadow:0 6px 18px rgba(255,0,0,0.12);background:#500}
+  #content{flex:1;padding:22px;overflow:auto}
+  textarea{width:96%;height:160px;background:#070607;color:#ffd7d7;padding:12px;border:2px solid #ff003c;border-radius:6px;font-family:monospace}
+  button{margin-top:12px;padding:10px 16px;background:#ff003c;border:none;color:#fff;border-radius:6px;cursor:pointer;font-weight:700}
+  #msg{margin-top:14px;padding:12px;border-radius:6px;font-weight:700}
+  pre.example{background:#0f0f0f;padding:10px;color:#9efff3;border-radius:6px;white-space:pre-wrap}
   #pyshotOverlay{position:fixed;left:0;top:0;width:100%;height:100%;display:none;
-    background:rgba(0,0,0,.8);z-index:50;align-items:center;justify-content:center}
-  #pyshotOverlay h1{font-size:72px;color:#ff3030;text-shadow:0 0 30px #ff3030;transform:scale(0);animation:pop .5s forwards}
+    background:rgba(0,0,0,.85);z-index:50;align-items:center;justify-content:center}
+  #pyshotOverlay h1{font-size:72px;color:#ff3030;text-shadow:0 0 30px #ff3030;transform:scale(0);animation:pop .45s forwards}
   @keyframes pop{to{transform:scale(1)}}
+  /* responsive */
+  @media(max-width:900px){
+    #sidebar{width:180px}
+    textarea{height:140px}
+  }
 </style>
 </head>
 <body>
@@ -37,52 +34,55 @@
   <h2>CALL-OF-PYTHON</h2>
 
   <div class="mission-title">INTRODUCCIÓN</div>
-  <div class="level" id="introBtn" onclick="loadLevel('intro')" data-id="intro">¿Qué es Python?</div>
+  <div class="level" data-id="intro" onclick="selectLevel('intro')">¿Qué es Python?</div>
 
-  <!-- MISIÓN 1 -->
   <div class="mission-title">MISIÓN 1: Fundamentos</div>
   <div class="sublevel-title">Básico</div>
-    <div class="level" data-id="1a" onclick="loadLevel('1a')">Variables</div>
-    <div class="level locked" data-id="1b" onclick="loadLevel('1b')">Strings</div>
-    <div class="level locked" data-id="1c" onclick="loadLevel('1c')">Números</div>
+    <div class="level" data-id="1-1" onclick="selectLevel('1-1')">Variables</div>
+    <div class="level locked" data-id="1-2" onclick="selectLevel('1-2')">Tipos de datos</div>
+    <div class="level locked" data-id="1-3" onclick="selectLevel('1-3')">Entrada (input)</div>
   <div class="sublevel-title">Intermedio</div>
-    <div class="level locked" data-id="1d" onclick="loadLevel('1d')">Concatenación</div>
-    <div class="level locked" data-id="1e" onclick="loadLevel('1e')">Casting</div>
+    <div class="level locked" data-id="1-4" onclick="selectLevel('1-4')">Operadores</div>
+    <div class="level locked" data-id="1-5" onclick="selectLevel('1-5')">Comentarios</div>
 
-  <!-- MISIÓN 2 -->
-  <div class="mission-title">MISIÓN 2: Condiciones</div>
+  <div class="mission-title">MISIÓN 2: Control</div>
   <div class="sublevel-title">Básico</div>
-    <div class="level locked" data-id="2a" onclick="loadLevel('2a')">If simple</div>
+    <div class="level locked" data-id="2-1" onclick="selectLevel('2-1')">Condicionales (if)</div>
   <div class="sublevel-title">Intermedio</div>
-    <div class="level locked" data-id="2b" onclick="loadLevel('2b')">If + Else</div>
+    <div class="level locked" data-id="2-2" onclick="selectLevel('2-2')">Bucles (for)</div>
   <div class="sublevel-title">Avanzado</div>
-    <div class="level locked" data-id="2c" onclick="loadLevel('2c')">If anidados</div>
+    <div class="level locked" data-id="2-3" onclick="selectLevel('2-3')">Break / Continue</div>
 
-  <!-- MISIÓN 3 -->
-  <div class="mission-title">MISIÓN 3: Bucles</div>
+  <div class="mission-title">MISIÓN 3: Estructuras</div>
   <div class="sublevel-title">Básico</div>
-    <div class="level locked" data-id="3a" onclick="loadLevel('3a')">For simple</div>
+    <div class="level locked" data-id="3-1" onclick="selectLevel('3-1')">Listas</div>
   <div class="sublevel-title">Intermedio</div>
-    <div class="level locked" data-id="3b" onclick="loadLevel('3b')">While</div>
+    <div class="level locked" data-id="3-2" onclick="selectLevel('3-2')">Tuplas</div>
+    <div class="level locked" data-id="3-3" onclick="selectLevel('3-3')">Diccionarios</div>
   <div class="sublevel-title">Avanzado</div>
-    <div class="level locked" data-id="3c" onclick="loadLevel('3c')">For con rango</div>
+    <div class="level locked" data-id="3-4" onclick="selectLevel('3-4')">Sets</div>
 
+  <div class="mission-title">MISIÓN 4: Funciones</div>
+  <div class="sublevel-title">Básico</div>
+    <div class="level locked" data-id="4-1" onclick="selectLevel('4-1')">Definir función</div>
+  <div class="sublevel-title">Intermedio</div>
+    <div class="level locked" data-id="4-2" onclick="selectLevel('4-2')">Parámetros</div>
+    <div class="level locked" data-id="4-3" onclick="selectLevel('4-3')">Return</div>
 </div>
 
 <div id="content">
   <h1 id="title"></h1>
   <p id="desc"></p>
 
-  <!-- Barra XP -->
-  <h3>XP</h3>
-  <div id="xpContainer"><div id="xpBar"></div></div>
+  <h3>Explicación:</h3>
+  <div id="explain" style="background:#111;padding:12px;border-radius:8px;color:#ffdede"></div>
 
   <h3>Ejemplo:</h3>
   <pre id="example" class="example">—</pre>
 
   <div id="exerciseArea" style="display:none">
-    <textarea id="code" placeholder="# Escribe tu código aquí..."></textarea><br>
-    <button id="runBtn" onclick="runLevel()">Ejecutar</button>
+    <textarea id="code" placeholder="# Escribe aquí tu código relacionado con la explicación"></textarea><br>
+    <button id="runBtn" onclick="runLevel()">Ejecutar / Verificar</button>
   </div>
 
   <div id="msg"></div>
@@ -91,109 +91,237 @@
 <div id="pyshotOverlay"><h1>PYSHOT</h1></div>
 
 <script>
-// ---------------- NIVELES — con nuevos niveles y ejemplos ----------------
+/* Niveles organizados (A: misión/niveles). Cada nivel tiene:
+   - title, desc (explicación breve), explain (más detallado),
+   - example (ejemplo visible) y check (regex o function) */
 const levels = {
-  intro:{
-    title:"Introducción a Python",
-    desc:"Python es un lenguaje fácil, limpio y poderoso. Se usa en IA, data, web y automatización.",
-    example:`print("Bienvenido a Call-Of-Python")`
+  intro: {
+    title: "Introducción a Python",
+    desc: "¿Qué es Python y para qué sirve?",
+    explain: "Python es un lenguaje sencillo, legible y muy usado en ciencia de datos, automatización y desarrollo web. Aquí aprenderás lo básico paso a paso.",
+    example: `print("Hola, bienvenido a Call-Of-Python")`
   },
 
-  // ----- MISIÓN 1 -----
-  "1a":{title:"Variables",desc:"Declara x=10.",example:`x=10`,check:/x\s*=\s*10/},
-  "1b":{title:"Strings",desc:"Crea nombre=\"Rodi\".",example:`nombre="Rodi"`,check:/nombre\s*=\s*["']/},
-  "1c":{title:"Números",desc:"Crea edad=17.",example:`edad=17`,check:/edad\s*=\s*17/},
-  "1d":{title:"Concatenación",desc:"Imprime Hola + nombre.",example:`print("Hola "+nombre)`,check:/\+\s*nombre/},
-  "1e":{title:"Casting",desc:"Convierte un número a string.",example:`str(25)`,check:/str\s*\(/},
+  // MISIÓN 1 — Fundamentos
+  "1-1": {
+    title: "Variables",
+    desc: "Qué es una variable y para qué sirve",
+    explain: "Una variable es un nombre que guarda un valor. Se asigna con '='. Pueden contener números, texto o booleanos.",
+    example: `edad = 20\nnombre = "Ana"`,
+    check: code => /[a-zA-Z_]\w*\s*=\s*(?:\d+|["'].*["'])/.test(code)
+  },
+  "1-2": {
+    title: "Tipos de datos",
+    desc: "Números, strings y booleanos",
+    explain: "Tipos comunes: enteros (int), punto flotante (float), cadenas (str) y booleanos (True/False). Aprende a distinguirlos.",
+    example: `entero = 5\nflotante = 3.14\ntexto = "hola"\nactivo = True`,
+    check: code => /["'].*["']|\d+\.\d+|\bTrue\b|\bFalse\b|\b\d+\b/.test(code)
+  },
+  "1-3": {
+    title: "Entrada (input)",
+    desc: "Leer datos del usuario",
+    explain: "La función input() permite leer texto desde el usuario. Ej: nombre = input('Tu nombre: ')",
+    example: `nombre = input("Tu nombre: ")\nprint("Hola " + nombre)`,
+    check: code => /\binput\s*\(/.test(code)
+  },
+  "1-4": {
+    title: "Operadores",
+    desc: "Suma, resta, mult y división",
+    explain: "Los operadores aritméticos permiten hacer cálculos. Ej: total = a + b, producto = x * y",
+    example: `a = 4\nb = 2\ntotal = a + b`,
+    check: code => /[+\-*/%]/.test(code)
+  },
+  "1-5": {
+    title: "Comentarios",
+    desc: "Documentar tu código",
+    explain: "Los comentarios comienzan con # y sirven para explicar partes del código sin ejecutarlas.",
+    example: `# Esto es un comentario\nx = 5  # comentario en línea`,
+    check: code => /#/.test(code)
+  },
 
-  // ----- MISIÓN 2 -----
-  "2a":{title:"If simple",desc:"If numero>10.",example:`if numero>10:\n    print("Mayor")`,check:/if.*>/},
-  "2b":{title:"If + else",desc:"If con else.",example:`if x>0:\n    print("OK")\nelse:\n    print("NO")`,check:/else/},
-  "2c":{title:"If anidado",desc:"If dentro de otro.",example:`if edad>=18:\n    if edad<30:\n        print("Joven")`,check:/if[\s\S]*if/},
+  // MISIÓN 2 — Control
+  "2-1": {
+    title: "Condicionales (if)",
+    desc: "Ejecutar código según condiciones",
+    explain: "If permite ejecutar un bloque si la condición es verdadera. La indentación es importante en Python.",
+    example: `numero = 12\nif numero > 10:\n    print("Mayor")`,
+    check: code => /\bif\b.*:/.test(code)
+  },
+  "2-2": {
+    title: "Bucles (for)",
+    desc: "Repetir acciones con for",
+    explain: "For recorre una secuencia. Ej: for i in range(3): print(i). Útil para repeticiones.",
+    example: `for i in range(3):\n    print(i)`,
+    check: code => /\bfor\b.*\bin\b/.test(code)
+  },
+  "2-3": {
+    title: "Break / Continue",
+    desc: "Controlar bucles",
+    explain: "break sale de un bucle; continue salta a la siguiente iteración. Se usan dentro del bloque del bucle.",
+    example: `for i in range(5):\n    if i==2:\n        break`,
+    check: code => /\b(break|continue)\b/.test(code)
+  },
 
-  // ----- MISIÓN 3 -----
-  "3a":{title:"For simple",desc:"For para imprimir 0 a 4.",example:`for i in range(5):\n    print(i)`,check:/for.*range/},
-  "3b":{title:"While",desc:"Usa while x<5.",example:`x=0\nwhile x<5:\n    x+=1`,check:/while/},
-  "3c":{title:"For con rango",desc:"Rango personalizado.",example:`for i in range(2,10):\n    print(i)`,check:/range\s*\(/}
+  // MISIÓN 3 — Estructuras
+  "3-1": {
+    title: "Listas",
+    desc: "Colecciones ordenadas",
+    explain: "Las listas se declaran con corchetes: nums = [1,2,3]. Se pueden recorrer con for.",
+    example: `frutas = ["manzana","pera","uva"]\nprint(frutas[0])`,
+    check: code => /\[.*\]/.test(code)
+  },
+  "3-2": {
+    title: "Tuplas",
+    desc: "Listas inmutables",
+    explain: "Las tuplas usan paréntesis y no se modifican: t = (1,2). Sirven para datos fijos.",
+    example: `t = (1, 2, 3)\nprint(t[1])`,
+    check: code => /\(.*,.+\)/.test(code)
+  },
+  "3-3": {
+    title: "Diccionarios",
+    desc: "Mapas clave → valor",
+    explain: "Los diccionarios usan llaves: d = {'a':1,'b':2}. Accedes con d['a'].",
+    example: `d = {"a":1, "b":2}\nprint(d["a"])`,
+    check: code => /\{.*:.*\}/.test(code)
+  },
+  "3-4": {
+    title: "Sets",
+    desc: "Colecciones sin orden ni duplicados",
+    explain: "Los sets se definen con set() o con llaves sin pares clave: s = {1,2,3}.",
+    example: `s = {1,2,3}\nprint(2 in s)`,
+    check: code => /\bset\s*\(|\{[^\:]+\}/.test(code)
+  },
+
+  // MISIÓN 4 — Funciones
+  "4-1": {
+    title: "Definir función",
+    desc: "Crear bloques de código reutilizables",
+    explain: "Se usa def nombre(): y dentro la lógica. Las funciones organizan el código.",
+    example: `def saludar():\n    print("Hola")\nsaludar()`,
+    check: code => /\bdef\b\s+[a-zA-Z_]\w*\s*\(.*\)\s*:/.test(code)
+  },
+  "4-2": {
+    title: "Parámetros",
+    desc: "Funciones con argumentos",
+    explain: "Puedes pasar valores a funciones: def f(x): return x*2. Así reutilizas con datos distintos.",
+    example: `def doble(n):\n    return n*2\nprint(doble(3))`,
+    check: code => /\bdef\b.*\(.*\w.*\)/.test(code)
+  },
+  "4-3": {
+    title: "Return",
+    desc: "Devolver valores desde la función",
+    explain: "return saca un valor de la función para usarlo fuera. Ej: return x+1.",
+    example: `def suma(a,b):\n    return a+b\nprint(suma(2,3))`,
+    check: code => /\breturn\b/.test(code)
+  }
 };
 
-// Estado del juego
-let currentLevel=null;
-let unlocked=["intro","1a"];
-let xp=0;
+/* Estado y utilidades */
+let current = null;
+let unlocked = ["intro","1-1"]; // intro + primer nivel desbloqueados
 
-// Accesos a elementos
-const xpBar=document.getElementById("xpBar");
-const msg=document.getElementById("msg");
-const pyshot=document.getElementById("pyshotOverlay");
+const titleEl = document.getElementById("title");
+const descEl = document.getElementById("desc");
+const explainEl = document.getElementById("explain");
+const exampleEl = document.getElementById("example");
+const exerciseArea = document.getElementById("exerciseArea");
+const msgEl = document.getElementById("msg");
+const pyshot = document.getElementById("pyshotOverlay");
 
-// ----------------- Cargar nivel -----------------
-function loadLevel(id){
-  currentLevel=id;
-  const l=levels[id];
-  document.getElementById("title").textContent=l.title;
-  document.getElementById("desc").textContent=l.desc;
-  document.getElementById("example").textContent=l.example;
-  msg.textContent="";
+/* Seleccionar nivel desde sidebar */
+function selectLevel(id){
+  // solo permitir si desbloqueado
+  if (!unlocked.includes(id)) {
+    msgEl.style.background="#3b0000";
+    msgEl.textContent = "Nivel bloqueado. Completa los previos.";
+    return;
+  }
+  // marcar active en sidebar
+  document.querySelectorAll("#sidebar .level").forEach(el=>el.classList.remove("active"));
+  const btn = document.querySelector(`#sidebar .level[data-id='${id}']`);
+  if (btn) btn.classList.add("active");
 
-  if(l.check){
-    document.getElementById("exerciseArea").style.display="block";
-    document.getElementById("code").value="";
+  current = id;
+  const lvl = levels[id];
+  titleEl.textContent = lvl.title || "";
+  descEl.textContent = lvl.desc || "";
+  explainEl.textContent = lvl.explain || "";
+  exampleEl.textContent = lvl.example || "—";
+  msgEl.textContent = "";
+  // mostrar editor si existe check, ocultar en intro
+  if (lvl.check) {
+    exerciseArea.style.display = "block";
+    document.getElementById("code").value = "";
   } else {
-    document.getElementById("exerciseArea").style.display="none";
+    exerciseArea.style.display = "none";
   }
 }
 
-// ----------------- XP -----------------
-function addXP(amount){
-  xp+=amount;
-  if(xp>100) xp=100;
-  xpBar.style.width=xp+"%";
+/* Ejecutar/validar nivel: check puede ser function o regex */
+function runLevel(){
+  if (!current) return;
+  const lvl = levels[current];
+  if (!lvl.check) return;
+  const code = document.getElementById("code").value;
+  try {
+    const ok = (typeof lvl.check === "function") ? lvl.check(code) : lvl.check.test(code);
+    if (ok) {
+      // Success: mostrar PYSHOT, mensaje y desbloquear siguiente
+      msgEl.style.background="#003b12";
+      msgEl.textContent = "¡Py-SHOT! Nivel completado.";
+      showPyshot();
+      unlockNext();
+    } else {
+      msgEl.style.background="#3b0000";
+      msgEl.textContent = "Código inválido o no relacionado. Revisa la explicación y el ejemplo.";
+    }
+  } catch (e) {
+    console.error(e);
+    msgEl.style.background="#3b0000";
+    msgEl.textContent = "Error validando. Revisa tu código.";
+  }
 }
 
-// ----------------- PYSHOT -----------------
+/* Mostrar overlay PYSHOT brevemente */
 function showPyshot(){
   pyshot.style.display="flex";
   setTimeout(()=>pyshot.style.display="none",1200);
 }
 
-// ----------------- Ejecutar -----------------
-function runLevel(){
-  const lvl=levels[currentLevel];
-  const code=document.getElementById("code").value;
-  if(!lvl.check) return;
-  msg.style.background="transparent";
-
-  if(lvl.check.test(code)){
-    msg.style.background="#003b12";
-    msg.textContent="¡PySHOT! Nivel completado.";
-    showPyshot();
-    addXP(20);
-    unlockNext();
-  } else {
-    msg.style.background="#3b0000";
-    msg.textContent="Código incorrecto. Observa el ejemplo.";
-  }
-}
-
-// ----------------- Desbloqueo -----------------
+/* Desbloquear siguiente nivel en el orden definido por la sidebar structure */
 function unlockNext(){
-  const order=Object.keys(levels);
-  const idx=order.indexOf(currentLevel);
-  if(idx>=0 && idx<order.length-1){
-    const next=order[idx+1];
-    unlocked.push(next);
-    const el=document.querySelector(`[data-id='${next}']`);
-    if(el) el.classList.remove("locked");
+  // Obtener la lista en el mismo orden que aparecen en levelsOrder
+  const levelsOrder = [
+    "intro",
+    "1-1","1-2","1-3","1-4","1-5",
+    "2-1","2-2","2-3",
+    "3-1","3-2","3-3","3-4",
+    "4-1","4-2","4-3"
+  ];
+  const idx = levelsOrder.indexOf(current);
+  if (idx >= 0 && idx < levelsOrder.length - 1) {
+    const next = levelsOrder[idx + 1];
+    if (!unlocked.includes(next)) {
+      unlocked.push(next);
+      // remove locked class on sidebar button
+      const el = document.querySelector(`#sidebar .level[data-id='${next}']`);
+      if (el) el.classList.remove("locked");
+    }
   }
 }
 
-// ---------------- Inicialización ----------------
-document.querySelectorAll(".level").forEach(el=>{
-  if(!unlocked.includes(el.dataset.id)) el.classList.add("locked");
-});
-loadLevel("intro");
-</script>
+/* Inicializar: marcar en el sidebar los data-id y locked según unlocked[] */
+(function init(){
+  // assign data-id attributes already in HTML; just ensure locked classes set
+  document.querySelectorAll("#sidebar .level").forEach(el=>{
+    const id = el.getAttribute("data-id");
+    if (!unlocked.includes(id)) el.classList.add("locked");
+    else el.classList.remove("locked");
+  });
+  // cargar intro al inicio
+  selectLevel("intro");
+})();
 
+</script>
 </body>
 </html>

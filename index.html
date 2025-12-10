@@ -2,108 +2,153 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Python Quest</title>
+<title>Call-Of-Python</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
-body{background:#0d0d0d;color:#eee;display:flex;height:100vh}
-nav{width:220px;background:#1a0000;padding:10px;overflow-y:auto}
-nav h2{color:#ff4d4d;margin-bottom:10px;font-size:20px;text-align:center}
-nav ul{list-style:none}
-nav li{padding:8px;margin:6px 0;background:#330000;border-radius:5px;cursor:pointer;opacity:.6}
-nav li.active{background:#ff1a1a;opacity:1}
-nav li.unlocked{opacity:1}
-nav li.locked{cursor:not-allowed}
-main{flex:1;display:flex;flex-direction:column;padding:15px}
-header{padding:10px;background:#1a0000;border-radius:5px;margin-bottom:10px;font-size:22px}
-#content{flex:1;background:#190000;padding:15px;border-radius:5px;overflow:auto}
-textarea{width:100%;height:150px;background:#000;color:#fff;border:1px solid #ff1a1a;border-radius:5px;padding:8px;font-size:15px}
-button{padding:10px 15px;border:none;border-radius:5px;margin-top:10px;background:#ff1a1a;color:#fff;cursor:pointer}
-#msg{margin-top:10px;padding:8px;border-radius:5px}
-#msg.ok{background:#0f3;color:#000}
-#msg.err{background:#900}
-footer{padding:8px;text-align:center;color:#777;font-size:13px}
+    body{margin:0;font-family:Arial;background:#0d0000;color:#fff;display:flex;height:100vh;}
+    #menu{width:220px;background:#1a0000;padding:15px;box-shadow:0 0 15px #900;}
+    #menu h2{text-align:center;color:#ff3333;margin-bottom:20px;font-size:22px;font-weight:bold;}
+    .lvl{padding:12px;background:#330000;margin-bottom:10px;cursor:pointer;border-left:5px solid #900;
+         opacity:.35;border-radius:4px;transition:.2s;font-size:15px;}
+    .lvl.unlocked{opacity:1;}
+    .lvl.active{background:#990000;border-left-color:#ff3333;}
+    #content{flex:1;padding:30px;overflow-y:auto;}
+    h1{color:#ff3b3b;margin-top:0;font-size:26px;}
+    textarea{width:100%;height:120px;background:#1a0000;color:#fff;border:1px solid #900;
+             padding:12px;font-size:15px;border-radius:4px;}
+    button{background:#ff3333;border:none;padding:10px 18px;color:#fff;border-radius:6px;cursor:pointer;}
+    .msg{margin-top:12px;padding:10px;border-radius:4px;font-size:15px;}
+    .ok{background:#003314;}
+    .bad{background:#4d0000;}
+
+    /* Pantalla PYSHOT */
+    #pyshot{
+        position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.85);
+        display:flex;justify-content:center;align-items:center;z-index:10;display:none;
+    }
+    #pyshot h1{
+        font-size:70px;color:#ff3333;text-shadow:0 0 30px #ff0000;font-weight:bold;
+        animation:pop .6s ease-out;
+    }
+    @keyframes pop{
+        0%{transform:scale(0);}
+        100%{transform:scale(1);}
+    }
 </style>
 </head>
 <body>
 
-<nav>
-<h2>Niveles</h2>
-<ul id="levels"></ul>
-</nav>
+<!-- Pantalla de victoria -->
+<div id="pyshot"><h1>PYSHOT</h1></div>
 
-<main>
-<header id="title">Python Quest</header>
+<div id="menu">
+    <h2>Call-Of-Python</h2>
+    <div class="lvl unlocked active" data-id="intro">Introducción</div>
+    <div class="lvl unlocked" data-id="n1">Nivel 1</div>
+    <div class="lvl" data-id="n2">Nivel 2</div>
+    <div class="lvl" data-id="n3">Nivel 3</div>
+    <div class="lvl" data-id="n4">Nivel 4</div>
+</div>
+
 <div id="content"></div>
-<footer>Proyecto educativo</footer>
-</main>
 
 <script>
-// --- DATA DEL JUEGO ---
-const levels=[
-{title:"Introducción",unlocked:true,desc:"Aprenderás Python desde cero.",task:null,solution:null},
-{title:"Nivel 1: Variables",unlocked:true,desc:"Declara una variable llamada edad con valor 25.",task:"edad = 25",solution:/edad\s*=\s*25/},
-{title:"Nivel 2: Strings",unlocked:false,desc:"Crea una variable nombre con valor 'Ana'.",task:"nombre = 'Ana'",solution:/nombre\s*=\s*['\"]Ana['\"]/},
-{title:"Nivel 3: Condicionales",unlocked:false,desc:"Si number es mayor a 10 imprime 'alto'.",task:"number=11\nif number>10:\n    print('alto')",solution:/if\s+number\s*>\s*10/},
-{title:"Nivel 4: Bucles",unlocked:false,desc:"Crea un for que imprima 0 al 4.",task:"for i in range(5): print(i)",solution:/for/},
-{title:"Nivel 5: Listas",unlocked:false,desc:"Crea una lista con tres frutas.",task:"frutas=['a','b','c']",solution:/\[/},
-{title:"Nivel Final",unlocked:false,desc:"Crea una función que retorne 'GG'.",task:"def f(): return 'GG'",solution:/def/}
-];
+/* ---- Contenido de cada nivel ---- */
+const data={
+  intro:{
+    teoria:"Python es un lenguaje fácil, rápido de aprender y perfecto para empezar. En Call-Of-Python, cada misión te enseña algo nuevo.",
+    ejemplo:"Ejemplo: print('Bienvenido')",
+    reto:"Escribe un print que diga: CallOfPython",
+    sol:"print('CallOfPython')"
+  },
+  n1:{
+    teoria:"Las variables guardan datos. Puedes poner números, textos o lo que quieras.",
+    ejemplo:"Ejemplo: vida = 100",
+    reto:"Crea una variable nivel con valor 1.",
+    sol:"nivel = 1"
+  },
+  n2:{
+    teoria:"Los strings son textos entre comillas. Se usan para mensajes, nombres y más.",
+    ejemplo:"Ejemplo: nombre = 'Rodi'",
+    reto:"Crea una variable msg con el texto 'Hola'.",
+    sol:"msg = 'Hola'"
+  },
+  n3:{
+    teoria:"Los if sirven para tomar decisiones en el juego.",
+    ejemplo:"Ejemplo:\nif vida > 0:\n    print('Sigues viva')",
+    reto:"Haz un if que imprima 'Gana' si 5 es mayor que 1.",
+    sol:"if 5 > 1:\n    print('Gana')"
+  },
+  n4:{
+    teoria:"Los bucles se usan para repetir acciones como disparos, pasos o rondas.",
+    ejemplo:"Ejemplo:\nfor x in range(3):\n    print('Bang')",
+    reto:"Crea un bucle for que imprima 3 veces 'Py'.",
+    sol:"for i in range(3):\n    print('Py')"
+  }
+};
 
-// --- RENDER MENU ---
-const ul=document.querySelector("#levels");
-function drawMenu(){
-ul.innerHTML="";
-levels.forEach((lv,i)=>{
-let li=document.createElement("li");
-li.textContent=lv.title;
-li.className=lv.unlocked?"unlocked":"locked";
-li.onclick=()=>lv.unlocked?openLevel(i):null;
-if(i===current)li.classList.add("active");
-ul.appendChild(li);
+/* ---- Cambio de pantalla ---- */
+let actual="intro";
+
+function cargar(id){
+  actual=id;
+  document.querySelectorAll(".lvl").forEach(e=>{
+    e.classList.remove("active");
+    if(e.dataset.id===id) e.classList.add("active");
+  });
+
+  let d=data[id];
+  content.innerHTML=`
+    <h1>${id.toUpperCase()}</h1>
+    <p>${d.teoria}</p>
+    <pre>${d.ejemplo}</pre>
+    <p><b>Misión:</b> ${d.reto}</p>
+    <textarea id="code"></textarea><br>
+    <button onclick="check()">Disparar</button>
+    <div id="msg"></div>
+  `;
+}
+
+document.querySelectorAll(".lvl").forEach(l=>{
+  l.onclick=()=>{
+    if(!l.classList.contains("unlocked")) return;
+    cargar(l.dataset.id);
+  };
 });
-}
 
-// --- RENDER CONTENT ---
-let current=0;
-function openLevel(i){
-current=i;
-drawMenu();
-let lv=levels[i];
-let html=`<h3>${lv.title}</h3><p>${lv.desc}</p>`;
-if(lv.solution){
-html+=`<textarea id='code' placeholder='Escribe tu código...'></textarea>
-<button onclick='check()'>Ejecutar</button><div id='msg'></div>`;
-}
-document.querySelector("#content").innerHTML=html;
-document.querySelector("#title").textContent=lv.title;
-}
-
-// --- VALIDACIÓN ---
+/* ---- Validar respuesta ---- */
 function check(){
-let code=document.querySelector("#code").value;
-let lv=levels[current];
-let msg=document.querySelector("#msg");
-if(lv.solution.test(code)){
-msg.textContent="Correcto, avanzas!";
-msg.className="ok";
-unlock();
-}else{
-msg.textContent="Incorrecto, revisa tu código.";
-msg.className="err";
-}
+  let code=document.getElementById("code").value.trim();
+  let msg=document.getElementById("msg");
+
+  if(code===data[actual].sol){
+    msg.innerHTML="<div class='msg ok'>Perfecto, misión cumplida.</div>";
+    unlock();
+    pyshot();
+  }else{
+    msg.innerHTML="<div class='msg bad'>Error, revisa tu código.</div>";
+  }
 }
 
-// --- DESBLOQUEO ---
+/* ---- Desbloquear siguiente nivel ---- */
 function unlock(){
-if(current+1<levels.length){
-levels[current+1].unlocked=true;
-drawMenu();
-}
+  const orden=["intro","n1","n2","n3","n4"];
+  let idx=orden.indexOf(actual);
+  let next=orden[idx+1];
+  if(next){
+    document.querySelector(`[data-id='${next}']`).classList.add("unlocked");
+  }
 }
 
-// INIT
-drawMenu();
-openLevel(0);
+/* ---- Mostrar pantalla PYSHOT ---- */
+function pyshot(){
+  let p=document.getElementById("pyshot");
+  p.style.display="flex";
+  setTimeout(()=>{ p.style.display="none"; },1500);
+}
+
+/* Cargar introducción al inicio */
+cargar("intro");
 </script>
+
 </body>
 </html>

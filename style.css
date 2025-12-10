@@ -1,0 +1,60 @@
+body{
+  font-family:Arial; margin:0; display:flex;
+  background:#120007; color:#fff; height:100vh;
+}
+
+/* Sidebar */
+#sidebar{
+  width:300px; background:#2b0010;
+  padding:18px; height:100vh; overflow:auto;
+  border-right:3px solid #ff002b;
+}
+#sidebar h2{ color:#ff003c; margin:0 0 10px; font-size:20px }
+.mission-title{ margin-top:14px; color:#ff8aa3; font-weight:700; font-size:15px }
+.sublevel-title{ margin-left:8px; margin-top:8px; color:#fcb3c4; font-size:13px }
+.level{
+  margin:6px 0 6px 18px; padding:8px;
+  background:#3d0016; border-left:4px solid #ff003c;
+  cursor:pointer; border-radius:6px; font-size:13px;
+}
+.locked{ opacity:.35; pointer-events:none }
+.active{ box-shadow:0 6px 18px rgba(255,0,0,0.12); background:#500 }
+
+/* Content */
+#content{ flex:1; padding:22px; overflow:auto }
+textarea{
+  width:96%; height:160px; background:#070607;
+  color:#ffd7d7; padding:12px;
+  border:2px solid #ff003c; border-radius:6px;
+  font-family:monospace;
+}
+button{
+  margin-top:12px; padding:10px 16px;
+  background:#ff003c; border:none;
+  color:#fff; border-radius:6px;
+  cursor:pointer; font-weight:700;
+}
+#msg{ margin-top:14px; padding:12px; border-radius:6px; font-weight:700 }
+pre.example{
+  background:#0f0f0f; padding:10px; color:#9efff3;
+  border-radius:6px; white-space:pre-wrap;
+}
+
+/* PYSHOT Overlay */
+#pyshotOverlay{
+  position:fixed; left:0; top:0; width:100%; height:100%;
+  display:none; background:rgba(0,0,0,.85);
+  z-index:50; align-items:center; justify-content:center;
+}
+#pyshotOverlay h1{
+  font-size:72px; color:#ff3030;
+  text-shadow:0 0 30px #ff3030;
+  transform:scale(0); animation:pop .45s forwards;
+}
+@keyframes pop{ to{ transform:scale(1) } }
+
+/* Responsivo */
+@media(max-width:900px){
+  #sidebar{ width:180px }
+  textarea{ height:140px }
+}
